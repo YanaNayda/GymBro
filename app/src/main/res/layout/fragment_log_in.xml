@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.LogIn">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:contentDescription="@string/todo"
+        android:src="@android:drawable/ic_dialog_info" />
+
+    <TextView
+        android:id="@+id/text_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="32sp"
+        android:text="@string/hello_blank_fragment" />
+
+    <EditText
+        android:id="@+id/edit_tx_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.4"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/name" />
+
+
+    <EditText
+        android:id="@+id/edit_tx_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.4"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/password"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:text="@string/log_in" />
+
+</LinearLayout>

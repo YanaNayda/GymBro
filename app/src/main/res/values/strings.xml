@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">GymBro</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Welcome to GymBro!</string>
+    <string name="name">Name</string>
+    <string name="todo">TODO</string>
+    <string name="log_in">log In</string>
+    <string name="password">Password</string>
+</resources>
