@@ -6,4 +6,8 @@
     <string name="todo">TODO</string>
     <string name="log_in">log In</string>
     <string name="password">Password</string>
+    <string name="or">or</string>
+    <string name="your_name">Your Name</string>
+    <string name="phone">Phone</string>
+    <string name="registration">Registration</string>
 </resources>
