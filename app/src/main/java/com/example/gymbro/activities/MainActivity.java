@@ -9,8 +9,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.gymbro.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private FirebaseAuth mAuth;
+    //FirebaseDatabase database ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +28,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        mAuth = FirebaseAuth.getInstance();
+       //database = FirebaseDatabase.getInstance();
+
     }
 }
