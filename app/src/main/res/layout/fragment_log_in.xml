@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_logIn"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,6 @@
     android:background="@drawable/gym_bro_back_login"
     tools:context=".fragments.LogIn">
 
-    <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/image_logo"
         android:layout_width="match_parent"
@@ -33,19 +33,30 @@
         android:text="@string/hello_blank_fragment" />
 
     <EditText
-        android:id="@+id/edit_tx_name"
+        android:id="@+id/edit_tx_email"
         android:background="@drawable/edit_txt_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="0.7"
-        android:autofillHints=""
+        android:layout_weight="0.2"
         android:ems="10"
-        android:inputType="text"
-        android:text="@string/name" />
+        android:hint="@string/enter_your_email"
+        android:drawableEnd="@drawable/img_email"
+        android:drawablePadding="8dp"
+        android:inputType="text" />
 
+    <TextView
+        android:id="@+id/txt_error_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:textSize="15sp"
+        android:textColor="#6F0200"
+        android:text="" />
 
     <EditText
         android:id="@+id/edit_tx_password"
@@ -54,41 +65,121 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0.7"
-        android:autofillHints=""
+        android:layout_weight="0.2"
         android:ems="10"
-        android:inputType="text"
-        android:text="@string/password"
+        android:hint="@string/enter_your_password"
+        android:inputType="textPassword"
+        android:drawableEnd="@drawable/img_lock_close"
+        android:drawablePadding="8dp"
         tools:ignore="TextFields" />
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="top|center"
-        android:layout_margin="10dp"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:text="@string/or" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.1"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_error_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:layout_weight="0.1"
+            android:gravity="top|left"
+            android:text=""
+            android:textColor="#6F0200"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btn_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.1"
+            android:background="#00FFFFFF"
+            android:gravity="top|right"
+            android:text="@string/forgot_password"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_back"
         android:layout_weight="0.2"
-        android:layout_margin="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:text="@string/log_in" />
+        app:backgroundTint="@null"
+        android:text="@string/SignIn" />
+
+    <Button
+        android:id="@+id/btn_to_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:layout_weight="0.1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="@string/no_account_yet_create_now" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="0.1">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white"
+            tools:ignore="NestedWeights" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/or"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_google_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_back"
+        android:layout_weight="0.2"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="40dp"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        app:backgroundTint="@null"
+        android:drawableEnd="@drawable/googleg_standard_color_18"
+        android:text="@string/sign_in_with_google" />
 
 </LinearLayout>

@@ -10,4 +10,20 @@
     <string name="your_name">Your Name</string>
     <string name="phone">Phone</string>
     <string name="registration">Registration</string>
+    <string name="no_account_yet_create_now">No account yet ? Create now!</string>
+    <string name="sign_in_with_google">Sign In with Google</string>
+    <string name="email">Email</string>
+    <string name="SignIn">Sign in</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign In</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="enter_your_phone">Enter your phone</string>
+    <string name="min_6_characters">Min 6 characters</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="phone_number_must_contain_only_numbers">Phone number must contain only numbers</string>
+    <string name="password_must_contain_at_least_6_characters">Password must contain at least 6 characters</string>
+    <string name="there_aren_t_equal">There aren\'t equal</string>
+    <string name="please_enter_your_email">Please enter your email</string>
 </resources>

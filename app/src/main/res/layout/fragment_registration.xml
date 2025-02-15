@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gym_bro_back_login"
+    android:id="@+id/fragment_registration"
+    android:background="@drawable/gym_bro_back_registration"
     tools:context=".fragments.Registration">
 
 
@@ -17,9 +18,10 @@
         android:src="@drawable/gym_bro_logo" />
 
     <TextView
+        android:id="@+id/txt_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_weight="0.7"
         android:gravity="center|bottom"
         android:layout_gravity="center"
         android:textStyle="bold"
@@ -30,66 +32,132 @@
 
 
     <EditText
-        android:id="@+id/edit_txt_name"
+        android:id="@+id/edit_txt_registration_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_txt_back"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:ems="10"
+        android:drawableEnd="@drawable/img_email"
+        android:drawablePadding="8dp"
         android:inputType="text"
-        android:text="@string/your_name" />
+        android:hint="@string/enter_your_email" />
+
+    <TextView
+        android:id="@+id/txt_error_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_weight="0.1"
+        android:gravity="top|left"
+        android:text=""
+        android:textColor="#6F0200"
+        android:textSize="15sp" />
 
     <EditText
-        android:id="@+id/edit_txt_phone"
+        android:id="@+id/edit_txt_registration_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_txt_back"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:ems="10"
+        android:drawableEnd="@drawable/img_phone"
+        android:drawablePadding="8dp"
+        android:hint="@string/enter_your_phone"
         android:inputType="phone" />
 
 
+    <TextView
+        android:id="@+id/txt_error_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_weight="0.1"
+        android:gravity="top|left"
+        android:text=""
+        android:textColor="#6F0200"
+        android:textSize="15sp"  />
 
     <EditText
-        android:id="@+id/edit_txt_password"
+        android:id="@+id/edit_txt_registration_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_txt_back"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:hint="@string/enter_your_password"
+        android:drawablePadding="8dp"
+        android:drawableEnd="@drawable/img_lock_close"
+        android:inputType="textPassword"
+
+         />
+
+    <TextView
+        android:id="@+id/txt_error_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_weight="0.1"
+        android:gravity="top|left"
+        android:text=""
+        android:textColor="#6F0200"
+        android:textSize="15sp"  />
 
     <EditText
-        android:id="@+id/edit_txt_password_confirm"
+        android:id="@+id/edit_txt_registration_password_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edit_txt_back"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="25dp"
-        android:layout_weight="0.25"
+        android:layout_weight="0.15"
         android:ems="10"
+        android:drawableEnd="@drawable/img_lock_close"
+        android:drawablePadding="8dp"
+        android:hint="@string/enter_your_password"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/txt_error_password_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_weight="0.1"
+        android:gravity="top|left"
+        android:text=""
+        android:textColor="#6F0200"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/btn_registration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:layout_margin="20dp"
+        android:layout_weight="0.2"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:textColor="@color/black"
+        app:backgroundTint="@null"
         android:background="@drawable/btn_back"
         android:text="@string/registration" />
+
+    <Button
+        android:id="@+id/btn_have_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:layout_marginBottom="10dp"
+        android:background="#00FFFFFF"
+        android:textColor="#ffffff"
+        android:text="@string/already_have_an_account_sign_in"
+        android:textSize="16sp" />
 
 </LinearLayout>

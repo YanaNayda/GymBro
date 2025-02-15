@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/logIn">
+
+    <fragment
+        android:id="@+id/logIn"
+        android:name="com.example.gymbro.fragments.LogIn"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_logIn_to_registration"
+            app:destination="@id/registration" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration"
+        android:name="com.example.gymbro.fragments.Registration"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/action_registration_to_logIn"
+            app:destination="@id/logIn" />
+    </fragment>
 
 </navigation>
