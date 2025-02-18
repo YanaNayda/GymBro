@@ -22,6 +22,14 @@
         <action
             android:id="@+id/action_registration_to_logIn"
             app:destination="@id/logIn" />
+        <action
+            android:id="@+id/action_registration_to_settings"
+            app:destination="@id/settings" />
     </fragment>
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.example.gymbro.fragments.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>

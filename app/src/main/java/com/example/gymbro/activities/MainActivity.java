@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     public void sendPasswordResetEmail(View view, String email){

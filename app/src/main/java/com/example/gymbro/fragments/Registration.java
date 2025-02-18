@@ -195,6 +195,7 @@ public class Registration extends Fragment {
 
                         MainActivity activity = (MainActivity) getActivity();
                         activity.registerUser(view, emailAddress, password );
+                        Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
 
 
                     }
@@ -209,6 +210,8 @@ public class Registration extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_registration_to_logIn);
             }
         });
+
+
 
 
 
