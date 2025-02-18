@@ -1,6 +1,7 @@
 package com.example.gymbro.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +14,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.gymbro.R;
+import com.example.gymbro.handlers.ExerciseHandler;
+import com.example.gymbro.models.Exercise;
 import com.example.gymbro.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +24,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,8 +47,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-       //database = FirebaseDatabase.getInstance();
+        ExerciseHandler s = new ExerciseHandler();
+        
+        s.fetchAllExercises(new ExerciseHandler.ExerciseDataCallback() {
+            @Override
+            public void onExercisesLoaded(ArrayList<Exercise> exercises) {
+                Log.d("MainActivity", "Loaded " + exercises.size() + " exercises successfully!");
+                Snackbar.make(findViewById(android.R.id.content), 
+                            "Loaded " + exercises.size() + " exercises successfully!", 
+                            Snackbar.LENGTH_LONG).show();
+            }
 
+            @Override
+            public void onError(Exception e) {
+                Log.e("MainActivity", "Error loading exercises", e);
+                Snackbar.make(findViewById(android.R.id.content),
+                            "Error loading exercises: " + e.getMessage(),
+                            Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(android.R.color.holo_red_light, getTheme()))
+                        .show();
+            }
+        });
     }
 
     public void logInUser(View view, String email, String password){
