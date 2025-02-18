@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(android.R.id.content), 
                             "Loaded " + exercises.size() + " exercises successfully!", 
                             Snackbar.LENGTH_LONG).show();
+                
+                ArrayList<String> equipment = new ArrayList<>(Arrays.asList(
+                        "e-z curl bar", "foam roll", "kettlebells", "machine",
+                        "dumbbell", "exercise ball", "medicine ball", "barbell",
+                        "bands", "cable", "body only"
+                ));
+                
+                ArrayList<String> levels = new ArrayList<>(Arrays.asList(
+                        "beginner", "intermediate", "expert"  // You can include any combination of levels
+                ));
+                
+                s.generateWeeklyWorkout(exercises, 7, equipment, levels);
             }
 
             @Override
