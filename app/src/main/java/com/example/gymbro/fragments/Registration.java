@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.gymbro.R;
 import com.example.gymbro.activities.MainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -53,6 +56,8 @@ public class Registration extends Fragment {
     private boolean isPassValid= false;
     private boolean isPassConfValid =false;
 
+    private FirebaseAuth mAuth;
+
     public Registration() {
         // Required empty public constructor
     }
@@ -65,6 +70,7 @@ public class Registration extends Fragment {
 
             View view = inflater.inflate(R.layout.fragment_registration, container, false);
 
+            mAuth = FirebaseAuth.getInstance();
 
             // Initialize views
             Button btn_register = view.findViewById(R.id.btn_registration);
@@ -194,9 +200,9 @@ public class Registration extends Fragment {
                     if (isPassConfValid && isPassValid && isPhoneValid && isEmailValid) {
 
                         MainActivity activity = (MainActivity) getActivity();
-                        activity.registerUser(view, emailAddress, password );
-                        Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
+                        assert activity != null;
 
+                        activity.registerUser(view, emailAddress, password );
 
                     }
                 }

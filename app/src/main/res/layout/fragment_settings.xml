@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/gym_bro_back_login"
     tools:context=".fragments.Settings">
 
     <TextView
         android:id="@+id/txt_Settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.95"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:text="@string/settings"
@@ -21,82 +22,89 @@
 
     <TextView
         android:id="@+id/txt_difficulty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:layout_weight="0.1"
+        android:layout_weight="1"
         android:text="@string/what_difficulty_would_you_like"
         android:textColor="#ffffff"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_height="match_parent"
+        android:layout_weight="0.95"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_beginner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="11sp"
-            android:background="@drawable/btn_back"
-            android:text="Beginner" />
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            android:background="@drawable/btn_back_choose"
+            android:text="@string/beginner" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_intermediate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="11sp"
-            android:background="@drawable/btn_back"
-            android:text="Intermediate" />
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            android:background="@drawable/btn_back_choose"
+            android:text="@string/intermediate" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_expert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            app:backgroundTint="@null"
             android:layout_margin="5dp"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="11sp"
-            android:background="@drawable/btn_back"
-            android:text="Expert" />
+            android:background="@drawable/btn_back_choose"
+            android:text="@string/expert" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:layout_marginStart="15dp"
-        android:text="How many days a week do you want to exercise?"
+        android:text="@string/how_many_days_a_week_do_you_want_to_exercise"
         android:textColor="#ffffff"
         android:textSize="18sp"
         android:textStyle="bold"
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
-
+        android:layout_marginBottom="15dp"
         android:layout_marginRight="15dp"
-        android:layout_weight="0.15"
+        android:layout_weight="0.85"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -107,7 +115,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -118,13 +127,13 @@
                 android:layout_weight="0.5"
                 android:textColor="#FFFFFF"
                 android:gravity="center|top"
-                android:text="S" />
+                android:text="@string/s" />
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -135,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -146,11 +156,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="M" />
+                android:text="@string/m" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -161,7 +171,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -172,11 +183,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="T" />
+                android:text="@string/t" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -187,7 +198,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -198,11 +210,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="W" />
+                android:text="@string/w" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -213,7 +225,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -224,11 +237,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="T" />
+                android:text="@string/t" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -239,7 +252,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -250,11 +264,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="F" />
+                android:text="@string/f" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -265,7 +279,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_back"
+                android:background="@drawable/btn_back_choose"
+                app:backgroundTint="@null"
                 android:contentDescription="@string/day"
                 android:text="@string/empty" />
 
@@ -276,18 +291,16 @@
                 android:layout_weight="0.5"
                 android:gravity="center|top"
                 android:textColor="#FFFFFF"
-                android:text="S" />
+                android:text="@string/s" />
         </LinearLayout>
-
-
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:layout_marginStart="15dp"
         android:textColor="#ffffff"
         android:textSize="18sp"
@@ -296,22 +309,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:orientation="horizontal">
 
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_equipment_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:backgroundTint="@null"
+            android:scrollbars="vertical"
+            />
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_ready"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_height="match_parent"
+        android:layout_weight="0.94"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
+        android:textColor="@color/black"
         android:background="@drawable/btn_back"
+        app:backgroundTint="@null"
         android:text="@string/i_m_ready" />
 
 </LinearLayout>

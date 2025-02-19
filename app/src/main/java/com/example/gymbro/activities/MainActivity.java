@@ -1,5 +1,6 @@
 package com.example.gymbro.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.navigation.Navigation;
 
 import com.example.gymbro.R;
 import com.example.gymbro.handlers.ExerciseHandler;
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseDatabase database ;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
         ExerciseHandler s = new ExerciseHandler();
         
         s.fetchAllExercises(new ExerciseHandler.ExerciseDataCallback() {
@@ -87,15 +89,18 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void registerUser (View view,String email, String password ){
+    public void registerUser(View view,String email, String password ){
+
         mAuth.createUserWithEmailAndPassword(email,password )
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FirebaseUser newUser = task.getResult().getUser();
+                            addData(newUser.getUid());
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                            addData();
-                            //Navigation.findNavController(view).navigate(R.id.action_registration_to_start2);
+
+                            Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
 
                         } else {
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
     }
 
     public void sendPasswordResetEmail(View view, String email){
@@ -121,19 +127,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void addData(){
+    public void addData(String userId){
 
         EditText email = findViewById(R.id.edit_txt_registration_email);
         EditText phone = findViewById(R.id.edit_txt_registration_phone);
         EditText password = findViewById(R.id.edit_txt_registration_password);
+        if (database == null) {
+            Log.e("FirebaseError", "Ошибка: database == null");
+            return;
+        }
+        database = FirebaseDatabase.getInstance();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        String UserCurrentId = currentUser.getUid();
-
-        DatabaseReference myRef = database.getReference("Users").child(UserCurrentId);
+        DatabaseReference myRef = database.getReference("users").child(userId);
 
         User s = new User(email.getText().toString(), password.getText().toString(),phone.getText().toString());
         myRef.setValue(s);
+
 
     }
 
