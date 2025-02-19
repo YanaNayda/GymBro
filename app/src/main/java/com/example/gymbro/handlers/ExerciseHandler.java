@@ -16,6 +16,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Arrays;
 
 public class ExerciseHandler {
     private final DatabaseReference dbRef;
@@ -103,6 +107,169 @@ public class ExerciseHandler {
             lst.add(BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length));
         }
         return lst;
+    }
+
+    public ArrayList<ArrayList<Exercise>> generateWeeklyWorkout(ArrayList<Exercise> allExercises, 
+                                                              int daysPerWeek, 
+                                                              ArrayList<String> availableEquipment, 
+                                                              ArrayList<String> levels) {
+        // Filter exercises by levels and equipment
+        ArrayList<Exercise> validExercises = filterExercises(allExercises, availableEquipment, levels);
+        
+        // Separate exercises by type
+        ArrayList<Exercise> strengthExercises = new ArrayList<>();
+        ArrayList<Exercise> stretchingExercises = new ArrayList<>();
+        ArrayList<Exercise> cardioExercises = new ArrayList<>();
+        
+        for (Exercise exercise : validExercises) {
+            switch (exercise.getCategory()) {
+                case "strength":
+                case "plyometrics":
+                    strengthExercises.add(exercise);
+                    break;
+                case "stretching":
+                    stretchingExercises.add(exercise);
+                    break;
+                case "cardio":
+                    cardioExercises.add(exercise);
+                    break;
+            }
+        }
+
+        // Create muscle coverage tracking
+        HashSet<String> musclesCovered = new HashSet<>();
+        ArrayList<ArrayList<Exercise>> weeklyWorkout = new ArrayList<>();
+
+        // Determine exercises per workout based on days per week
+        int exercisesPerWorkout = (daysPerWeek == 1) ? 8 : // Full body
+                                 (daysPerWeek == 2) ? 6 :   // Upper/Lower split
+                                 (daysPerWeek == 3) ? 5 :   // Push/Pull/Legs
+                                 4;                         // Body part split
+
+        // Generate workouts for each day
+        for (int day = 0; day < daysPerWeek; day++) {
+            ArrayList<Exercise> workout = new ArrayList<>();
+            
+            // Add a stretching exercise at the start
+            if (!stretchingExercises.isEmpty()) {
+                workout.add(stretchingExercises.get(new Random().nextInt(stretchingExercises.size())));
+            }
+
+            // Add strength/plyometric exercises
+            ArrayList<Exercise> dayExercises = selectExercisesForDay(
+                strengthExercises, 
+                musclesCovered, 
+                exercisesPerWorkout, 
+                daysPerWeek, 
+                day
+            );
+            workout.addAll(dayExercises);
+
+            // Add a cardio exercise at the end
+            if (!cardioExercises.isEmpty()) {
+                workout.add(cardioExercises.get(new Random().nextInt(cardioExercises.size())));
+            }
+
+            weeklyWorkout.add(workout);
+        }
+
+        return weeklyWorkout;
+    }
+
+    private ArrayList<Exercise> filterExercises(ArrayList<Exercise> exercises, 
+                                              ArrayList<String> availableEquipment, 
+                                              ArrayList<String> levels) {
+        ArrayList<Exercise> filtered = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+            if (levels.contains(exercise.getLevel()) && 
+                (availableEquipment.contains(exercise.getEquipment()) || 
+                 exercise.getEquipment().equals("body only"))) {
+                filtered.add(exercise);
+            }
+        }
+        return filtered;
+    }
+
+    private ArrayList<Exercise> selectExercisesForDay(ArrayList<Exercise> exercises, 
+                                                     HashSet<String> musclesCovered, 
+                                                     int exercisesNeeded,
+                                                     int totalDays,
+                                                     int currentDay) {
+        ArrayList<Exercise> selected = new ArrayList<>();
+        ArrayList<Exercise> availableExercises = new ArrayList<>(exercises);
+        Collections.shuffle(availableExercises);
+
+        if (totalDays == 1) {
+            // Full body workout - select exercises that target different muscles
+            while (selected.size() < exercisesNeeded && !availableExercises.isEmpty()) {
+                Exercise bestExercise = findBestExercise(availableExercises, musclesCovered);
+                if (bestExercise != null) {
+                    selected.add(bestExercise);
+                    availableExercises.remove(bestExercise);
+                    musclesCovered.addAll(bestExercise.getPrimaryMuscles());
+                    musclesCovered.addAll(bestExercise.getSecondaryMuscles());
+                }
+            }
+        } else if (totalDays == 2) {
+            // Upper/Lower split
+            boolean isUpperDay = currentDay == 0;
+            for (Exercise exercise : availableExercises) {
+                boolean isUpperExercise = isUpperBodyExercise(exercise);
+                if ((isUpperDay && isUpperExercise) || (!isUpperDay && !isUpperExercise)) {
+                    if (selected.size() < exercisesNeeded) {
+                        selected.add(exercise);
+                        musclesCovered.addAll(exercise.getPrimaryMuscles());
+                        musclesCovered.addAll(exercise.getSecondaryMuscles());
+                    }
+                }
+            }
+        } else {
+            // For 3+ days, focus on complementary muscle groups each day
+            while (selected.size() < exercisesNeeded && !availableExercises.isEmpty()) {
+                Exercise exercise = findBestExercise(availableExercises, musclesCovered);
+                if (exercise != null) {
+                    selected.add(exercise);
+                    availableExercises.remove(exercise);
+                    musclesCovered.addAll(exercise.getPrimaryMuscles());
+                    musclesCovered.addAll(exercise.getSecondaryMuscles());
+                }
+            }
+        }
+
+        return selected;
+    }
+
+    private Exercise findBestExercise(ArrayList<Exercise> exercises, HashSet<String> musclesCovered) {
+        Exercise bestExercise = null;
+        int maxNewMuscles = -1;
+
+        for (Exercise exercise : exercises) {
+            HashSet<String> newMuscles = new HashSet<>();
+            newMuscles.addAll(exercise.getPrimaryMuscles());
+            newMuscles.addAll(exercise.getSecondaryMuscles());
+            newMuscles.removeAll(musclesCovered);
+
+            if (newMuscles.size() > maxNewMuscles) {
+                maxNewMuscles = newMuscles.size();
+                bestExercise = exercise;
+            }
+        }
+
+        return bestExercise;
+    }
+
+    private boolean isUpperBodyExercise(Exercise exercise) {
+        HashSet<String> upperBodyMuscles = new HashSet<>(Arrays.asList(
+            "shoulders", "triceps", "chest", "forearms", "lats",
+            "middle back", "neck", "traps", "biceps"
+        ));
+
+        for (String muscle : exercise.getPrimaryMuscles()) {
+            if (upperBodyMuscles.contains(muscle)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public interface ExerciseDataCallback {
