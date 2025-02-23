@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,9 +25,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,26 +106,26 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void registerUser(View view,String email, String password ){
-
-        mAuth.createUserWithEmailAndPassword(email,password )
+    public void registerUser(View view, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser newUser = task.getResult().getUser();
-                            addData(newUser.getUid());
-                            Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            if (newUser != null) {
+                                String userId = newUser.getUid();
+                                addData(userId); // Передаём userId в addData()
+                            }
 
+                            Toast.makeText(MainActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
-
                         } else {
-                            Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(MainActivity.this, "Ошибка регистрации: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("FirebaseAuth", "Ошибка регистрации", task.getException());
                         }
                     }
                 });
-
     }
 
     public void sendPasswordResetEmail(View view, String email){
@@ -140,22 +144,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void addData(String userId){
+    public void addData(String userId) {
+        EditText emailField = findViewById(R.id.edit_txt_registration_email);
+        EditText phoneField = findViewById(R.id.edit_txt_registration_phone);
+        EditText passwordField = findViewById(R.id.edit_txt_registration_password);
 
-        EditText email = findViewById(R.id.edit_txt_registration_email);
-        EditText phone = findViewById(R.id.edit_txt_registration_phone);
-        EditText password = findViewById(R.id.edit_txt_registration_password);
         if (database == null) {
             Log.e("FirebaseError", "Ошибка: database == null");
             return;
         }
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Users");
+        myRef = database.getReference("Users").child("" + userId);
 
-        DatabaseReference myRef = database.getReference("users").child(userId);
+        myRef.setValue("Hello, World!");
 
-        User s = new User(email.getText().toString(), password.getText().toString(),phone.getText().toString());
-        myRef.setValue(s);
+        User newUser = new User(
+                emailField.getText().toString(),
+                passwordField.getText().toString(),
+                phoneField.getText().toString()
+        );
 
+        myRef.setValue(newUser).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("FirebaseDatabase", "Данные успешно записаны!");
+            } else {
+                Log.e("FirebaseDatabase", "Ошибка записи данных", task.getException());
+            }
+        });
+    }
+
+    public void getData(String UserCurrentId , View view){
+        DatabaseReference myRef = database.getReference("Users").child(UserCurrentId);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                User value = snapshot.getValue(User.class);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("effireg", "Failed to read value.", error.toException());
+            }
+        });
 
     }
 

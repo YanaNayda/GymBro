@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_logIn_to_registration"
             app:destination="@id/registration" />
+
+        <action
+            android:id="@+id/action_logIn_to_gymActivity"
+            app:destination="@id/gymActivity" />
     </fragment>
     <fragment
         android:id="@+id/registration"
@@ -30,6 +34,24 @@
         android:id="@+id/settings"
         android:name="com.example.gymbro.fragments.Settings"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings_to_gymActivity"
+            app:destination="@id/gymActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.example.gymbro.fragments.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/motivation2"
+        android:name="com.example.gymbro.fragments.Motivation"
+        android:label="fragment_motivation"
+        tools:layout="@layout/fragment_motivation" />
+    <activity
+        android:id="@+id/gymActivity"
+        android:name="com.example.gymbro.activities.GymActivity"
+        android:label="GymActivity" />
 
 </navigation>
