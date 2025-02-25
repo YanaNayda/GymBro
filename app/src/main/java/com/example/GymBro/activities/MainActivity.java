@@ -31,13 +31,13 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
     FirebaseDatabase database ;
+    ExerciseHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,27 +52,16 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        ExerciseHandler s = new ExerciseHandler();
-        
-        s.fetchAllExercises(new ExerciseHandler.ExerciseDataCallback() {
+        handler = new ExerciseHandler(this);
+
+        handler.fetchAllExercises(new ExerciseHandler.ExerciseLoadCallback() {
             @Override
             public void onExercisesLoaded(ArrayList<ExerciseModel> exercises) {
                 Log.d("MainActivity", "Loaded " + exercises.size() + " exercises successfully!");
                 Snackbar.make(findViewById(android.R.id.content), 
                             "Loaded " + exercises.size() + " exercises successfully!", 
                             Snackbar.LENGTH_LONG).show();
-                
-                ArrayList<String> equipment = new ArrayList<>(Arrays.asList(
-                        "e-z curl bar", "foam roll", "kettlebells", "machine",
-                        "dumbbell", "exercise ball", "medicine ball", "barbell",
-                        "bands", "cable", "body only"
-                ));
-                
-                ArrayList<String> levels = new ArrayList<>(Arrays.asList(
-                        "beginner", "intermediate", "expert"  // You can include any combination of levels
-                ));
-                
-                s.generateWeeklyWorkout(exercises, 7, equipment, levels);
+                handler.setExercisesList(exercises);
             }
 
             @Override
@@ -87,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public ExerciseHandler getHandler() {
+        return handler;
+    }
+
     public void logInUser(View view, String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -94,11 +87,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                           // Navigation.findNavController(view).navigate(R.id.action_logIn_to_start2);
-
+                            Navigation.findNavController(view).navigate(R.id.action_logIn_to_gymActivity);
                         } else {
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
-
                         }
                     }
                 });
@@ -115,12 +106,11 @@ public class MainActivity extends AppCompatActivity {
                                 String userId = newUser.getUid();
                                 addData(userId); // Передаём userId в addData()
                             }
-
-                            Toast.makeText(MainActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Registered Successfuly", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
                         } else {
-                            Toast.makeText(MainActivity.this, "Ошибка регистрации: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("FirebaseAuth", "Ошибка регистрации", task.getException());
+                            Toast.makeText(MainActivity.this, "Error Registering: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("FirebaseAuth", "Error Registering!", task.getException());
                         }
                     }
                 });
@@ -152,8 +142,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users");
-        myRef = database.getReference("Users").child("" + userId);
+        DatabaseReference myRef = database.getReference("Users").child("" + userId);
 
         myRef.setValue("Hello, World!");
 
@@ -165,9 +154,9 @@ public class MainActivity extends AppCompatActivity {
 
         myRef.setValue(newUser).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.d("FirebaseDatabase", "Данные успешно записаны!");
+                Log.d("FirebaseDatabase", "Data successfully written!");
             } else {
-                Log.e("FirebaseDatabase", "Ошибка записи данных", task.getException());
+                Log.e("FirebaseDatabase", "Data writing error", task.getException());
             }
         });
     }

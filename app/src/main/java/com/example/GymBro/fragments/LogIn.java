@@ -181,7 +181,6 @@ public class LogIn extends Fragment {
                 // If valid, call the logInUser method in MainActivity
                 MainActivity newActivity = (MainActivity) getActivity();
                 newActivity.logInUser(view, string_email, string_password);
-                Navigation.findNavController(view).navigate(R.id.action_logIn_to_gymActivity);
             }
         });
 

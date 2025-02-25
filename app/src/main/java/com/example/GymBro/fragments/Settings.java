@@ -15,10 +15,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.GymBro.R;
+import com.example.GymBro.activities.MainActivity;
 import com.example.GymBro.adapters.AdapterEquipmentSettings;
 import com.example.GymBro.classes.DataEquipment;
 
+import com.example.GymBro.handlers.ExerciseHandler;
 import com.example.GymBro.models.EquipmentModel;
+import com.example.GymBro.models.ExerciseModel;
 import com.example.GymBro.models.SettingsModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,7 +46,6 @@ public class Settings extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
     private FirebaseAuth mAuth;
 
     private RecyclerView recyclerSettings;
@@ -52,8 +54,8 @@ public class Settings extends Fragment {
     private ArrayList<EquipmentModel> equipmentSetEquipments;
     private ArrayList<SettingsModel> settingsModels;
 
-    Button btn_beginner,btn_intermediate,btn_expert;
-    Button btn_sunday,btn_monday,btn_tuesday,btn_wednesday,btn_thursday,btn_friday,btn_saturday;
+    Button btn_beginner, btn_intermediate, btn_expert;
+    Button btn_sunday, btn_monday, btn_tuesday, btn_wednesday, btn_thursday, btn_friday, btn_saturday;
     Button btn_ready;
 
     public Settings() {
@@ -92,31 +94,33 @@ public class Settings extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        // Initialize FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
 
+        // Initialize settingsModels
+        settingsModels = new ArrayList<>();
+
+        // Initialize views
         btn_beginner = view.findViewById(R.id.btn_beginner);
         btn_intermediate = view.findViewById(R.id.btn_intermediate);
         btn_expert = view.findViewById(R.id.btn_expert);
 
         btn_sunday = view.findViewById(R.id.btn_sunday);
-        btn_monday =view.findViewById(R.id.btn_monday);
-        btn_thursday =view.findViewById(R.id.btn_thursday);
-        btn_tuesday =view.findViewById(R.id.btn_tuesday);
-        btn_wednesday =view.findViewById(R.id.btn_wednesday);
-        btn_friday =view.findViewById(R.id.btn_friday);
-        btn_saturday =view.findViewById(R.id.btn_saturday);
-        btn_ready =view.findViewById(R.id.btn_ready);
+        btn_monday = view.findViewById(R.id.btn_monday);
+        btn_tuesday = view.findViewById(R.id.btn_tuesday);
+        btn_wednesday = view.findViewById(R.id.btn_wednesday);
+        btn_thursday = view.findViewById(R.id.btn_thursday);
+        btn_friday = view.findViewById(R.id.btn_friday);
+        btn_saturday = view.findViewById(R.id.btn_saturday);
+        btn_ready = view.findViewById(R.id.btn_ready);
 
-
-        mAuth = FirebaseAuth.getInstance();
+        // Initialize RecyclerView and adapter
         recyclerSettings = view.findViewById(R.id.recycler_equipment_settings);
-
-
-        settingsModels =new ArrayList<>();
-        equipmentSetEquipments = new ArrayList<>();
         layoutManager = new LinearLayoutManager(getContext());
         recyclerSettings.setLayoutManager(layoutManager);
         recyclerSettings.setItemAnimator(new DefaultItemAnimator());
 
+        equipmentSetEquipments = new ArrayList<>();
         for (int i = 0; i < DataEquipment.nameEquipment.length; i++) {
             equipmentSetEquipments.add(new EquipmentModel(
                     DataEquipment.nameEquipment[i],
@@ -126,9 +130,34 @@ public class Settings extends Fragment {
         adapter = new AdapterEquipmentSettings(equipmentSetEquipments);
         recyclerSettings.setAdapter(adapter);
 
+        // Set up button click listeners
+        setupButtonListeners(view);
 
+        return view;
+    }
 
+    private void setupButtonListeners(View view) {
+        // "Select All" button
+        Button btnSelectAll = view.findViewById(R.id.btn_select_all);
+        btnSelectAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isAllSelected = isAllEquipmentSelected();
 
+                // Toggle selection state of all items
+                for (EquipmentModel equipment : equipmentSetEquipments) {
+                    equipment.setSelected(!isAllSelected);
+                }
+
+                // Notify adapter that data has changed
+                adapter.notifyDataSetChanged();
+
+                // Update "Select All" button text
+                btnSelectAll.setText(isAllSelected ? "Select All" : "Deselect All");
+            }
+        });
+
+        // Other button click listeners
         btn_beginner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,43 +185,49 @@ public class Settings extends Fragment {
                 v.setSelected(!v.isSelected());
             }
         });
+
         btn_monday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
-                }
+            }
         });
+
         btn_tuesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
             }
-
         });
+
         btn_wednesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
             }
         });
+
         btn_thursday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
             }
         });
+
         btn_friday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
             }
         });
+
         btn_saturday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.setSelected(!v.isSelected());
             }
         });
+
         btn_ready.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,16 +235,16 @@ public class Settings extends Fragment {
                 ArrayList<String> selectedDays = new ArrayList<>();
                 ArrayList<String> selectedEquipment = new ArrayList<>();
 
+                // Add selected levels, days, and equipment to their respective lists
                 if (btn_beginner.isSelected()) {
-                    selectedLevels.add("Beginner");
+                    selectedLevels.add("beginner");
                 }
                 if (btn_intermediate.isSelected()) {
-                    selectedLevels.add("Intermediate");
+                    selectedLevels.add("intermediate");
                 }
                 if (btn_expert.isSelected()) {
-                    selectedLevels.add("Expert");
+                    selectedLevels.add("expert");
                 }
-
 
                 if (btn_sunday.isSelected()) {
                     selectedDays.add("Sunday");
@@ -233,18 +268,28 @@ public class Settings extends Fragment {
                     selectedDays.add("Saturday");
                 }
 
-
                 for (EquipmentModel equipment : equipmentSetEquipments) {
                     if (equipment.isSelected()) {
                         selectedEquipment.add(equipment.getName());
                     }
                 }
                 if (selectedEquipment.isEmpty()) {
-                    selectedEquipment.add("Full Body");
-
+                    selectedEquipment.add("full body");
                 }
 
+                // Check if mAuth is initialized
+                if (mAuth == null) {
+                    Toast.makeText(getActivity(), "FirebaseAuth not initialized", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Get the current user
                 FirebaseUser user = mAuth.getCurrentUser();
+                if (user == null) {
+                    Toast.makeText(getActivity(), "User not logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String uid = user.getUid();
 
                 if (!selectedLevels.isEmpty() || !selectedDays.isEmpty() || !selectedEquipment.isEmpty()) {
@@ -254,14 +299,28 @@ public class Settings extends Fragment {
                             selectedDays
                     );
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid).child("settings");
-                    settingsModels.add(model);
+                    MainActivity newActivity = (MainActivity) getActivity();
+                    ExerciseHandler handler = newActivity.getHandler();
+                    ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+                    ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(exercises, selectedDays, selectedEquipment, selectedLevels);
+
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("settings");
                     databaseReference.setValue(model)
                             .addOnSuccessListener(aVoid ->
                                     Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show()
                             )
                             .addOnFailureListener(e ->
                                     Toast.makeText(getActivity(), "Failed to save settings", Toast.LENGTH_SHORT).show()
+                            );
+
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("weeklyExercise");
+                    databaseReference.setValue(generatedList)
+                            .addOnSuccessListener(aVoid ->
+                                    Toast.makeText(getActivity(), "Generated exercises saved", Toast.LENGTH_SHORT).show()
+                            )
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(getActivity(), "Failed to save generated exercises", Toast.LENGTH_SHORT).show()
                             );
                 } else {
                     if (selectedLevels.isEmpty()) {
@@ -275,7 +334,15 @@ public class Settings extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
             }
         });
+    }
 
-        return view;
+    // Helper method to check if all equipment items are selected
+    private boolean isAllEquipmentSelected() {
+        for (EquipmentModel equipment : equipmentSetEquipments) {
+            if (!equipment.isSelected()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_course" />
     <fragment
         android:id="@+id/home2"
-        android:name="com.example.GymBro.fragments.Home"
+        android:name="com.example.GymBro.fragments.Workout"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
