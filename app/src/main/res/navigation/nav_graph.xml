@@ -7,20 +7,19 @@
 
     <fragment
         android:id="@+id/logIn"
-        android:name="com.example.gymbro.fragments.LogIn"
+        android:name="com.example.GymBro.fragments.LogIn"
         android:label="fragment_log_in"
         tools:layout="@layout/fragment_log_in" >
         <action
             android:id="@+id/action_logIn_to_registration"
             app:destination="@id/registration" />
-
         <action
             android:id="@+id/action_logIn_to_gymActivity"
             app:destination="@id/gymActivity" />
     </fragment>
     <fragment
         android:id="@+id/registration"
-        android:name="com.example.gymbro.fragments.Registration"
+        android:name="com.example.GymBro.fragments.Registration"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" >
         <action
@@ -32,26 +31,37 @@
     </fragment>
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.gymbro.fragments.Settings"
+        android:name="com.example.GymBro.fragments.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_settings_to_gymActivity"
+            android:id="@+id/action_settings_to_gymActivity2"
             app:destination="@id/gymActivity" />
     </fragment>
+    <activity
+        android:id="@+id/gymActivity"
+        android:name="com.example.GymBro.activities.GymActivity"
+        android:label="activity_gym"
+        tools:layout="@layout/activity_gym" />
+    <fragment
+        android:id="@+id/course2"
+        android:name="com.example.GymBro.fragments.Course"
+        android:label="fragment_course"
+        tools:layout="@layout/fragment_course" />
     <fragment
         android:id="@+id/home2"
-        android:name="com.example.gymbro.fragments.Home"
+        android:name="com.example.GymBro.fragments.Home"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/motivation2"
-        android:name="com.example.gymbro.fragments.Motivation"
+        android:name="com.example.GymBro.fragments.Motivation"
         android:label="fragment_motivation"
         tools:layout="@layout/fragment_motivation" />
-    <activity
-        android:id="@+id/gymActivity"
-        android:name="com.example.gymbro.activities.GymActivity"
-        android:label="GymActivity" />
+    <fragment
+        android:id="@+id/exercise2"
+        android:name="com.example.GymBro.fragments.Exercise"
+        android:label="fragment_exercise"
+        tools:layout="@layout/fragment_exercise" />
 
 </navigation>

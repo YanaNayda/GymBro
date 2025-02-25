@@ -1,4 +1,4 @@
-package com.example.gymbro.fragments;
+package com.example.GymBro.fragments;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gymbro.R;
+import com.example.GymBro.R;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gymbro"
+    namespace = "com.example.GymBro"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.gymbro"
+        applicationId = "com.example.GymBro"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -42,6 +42,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

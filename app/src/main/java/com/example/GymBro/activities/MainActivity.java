@@ -1,11 +1,9 @@
-package com.example.gymbro.activities;
+package com.example.GymBro.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,10 +14,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.Navigation;
 
-import com.example.gymbro.R;
-import com.example.gymbro.handlers.ExerciseHandler;
-import com.example.gymbro.models.Exercise;
-import com.example.gymbro.models.User;
+import com.example.GymBro.R;
+import com.example.GymBro.handlers.ExerciseHandler;
+import com.example.GymBro.models.ExerciseModel;
+import com.example.GymBro.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         
         s.fetchAllExercises(new ExerciseHandler.ExerciseDataCallback() {
             @Override
-            public void onExercisesLoaded(ArrayList<Exercise> exercises) {
+            public void onExercisesLoaded(ArrayList<ExerciseModel> exercises) {
                 Log.d("MainActivity", "Loaded " + exercises.size() + " exercises successfully!");
                 Snackbar.make(findViewById(android.R.id.content), 
                             "Loaded " + exercises.size() + " exercises successfully!", 
@@ -159,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
         myRef.setValue("Hello, World!");
 
-        User newUser = new User(
+        UserModel newUser = new UserModel(
                 emailField.getText().toString(),
                 passwordField.getText().toString(),
                 phoneField.getText().toString()
@@ -182,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                User value = snapshot.getValue(User.class);
+                UserModel value = snapshot.getValue(UserModel.class);
 
 
             }

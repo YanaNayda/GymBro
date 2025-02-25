@@ -1,6 +1,4 @@
-package com.example.gymbro.classes;
-
-import static android.os.Build.VERSION_CODES.R;
+package com.example.GymBro.classes;
 
 public class DataEquipment {
 

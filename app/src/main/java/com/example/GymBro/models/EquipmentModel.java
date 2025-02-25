@@ -1,19 +1,19 @@
-package com.example.gymbro.models;
+package com.example.GymBro.models;
 
 import java.io.Serializable;
 
-public class Equipment implements Serializable {
+public class EquipmentModel implements Serializable {
 
     private String name;
     private int id;
     private boolean isSelected;
 
-    public Equipment(String name, int id) {
+    public EquipmentModel(String name, int id) {
         this.name = name;
         this.id = id;
         this.isSelected=false;
     }
-    public Equipment() {
+    public EquipmentModel() {
     }
 
     public String getName() {

@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/motivation"
-        android:title="Motivation" />
+        android:id="@+id/home_button"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="Home"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/course"
-        android:title="Course" />
+        android:id="@+id/course_button"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="Course"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/exercise"
-        android:title="Exercise" />
+        android:id="@+id/exercise_button"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="Exercise"
+        app:showAsAction="ifRoom" />
+
     <item
-        android:id="@+id/home"
-        android:title="Home" />
+        android:id="@+id/motivation_button"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="Motivation"
+        app:showAsAction="ifRoom" />
 
 </menu>

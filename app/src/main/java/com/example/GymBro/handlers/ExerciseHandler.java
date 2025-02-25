@@ -1,4 +1,4 @@
-package com.example.gymbro.handlers;
+package com.example.GymBro.handlers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.gymbro.models.Exercise;
+import com.example.GymBro.models.ExerciseModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +35,7 @@ public class ExerciseHandler {
         fetchNextBatch(new ArrayList<>(), callback);
     }
 
-    private void fetchNextBatch(ArrayList<Exercise> exerciseList, ExerciseDataCallback callback) {
+    private void fetchNextBatch(ArrayList<ExerciseModel> exerciseList, ExerciseDataCallback callback) {
         Query query;
         if (lastKey == null) {
             query = dbRef.orderByKey().limitToFirst(LIMIT_PER_QUERY);
@@ -51,7 +51,7 @@ public class ExerciseHandler {
                     count++;
                     lastKey = snapshot.getKey();
 
-                    Exercise exercise = new Exercise();
+                    ExerciseModel exercise = new ExerciseModel();
                     exercise.setName(snapshot.child("name").getValue(String.class));
                     exercise.setLevel(snapshot.child("level").getValue(String.class));
                     exercise.setEquipment(snapshot.child("equipment").getValue(String.class));
@@ -96,7 +96,7 @@ public class ExerciseHandler {
         });
     }
 
-    public ArrayList<Bitmap> getBitmapsFromExercise(Exercise exercise) {
+    public ArrayList<Bitmap> getBitmapsFromExercise(ExerciseModel exercise) {
         ArrayList<Bitmap> lst = new ArrayList<>();
         if (exercise.getImg0() != null && !exercise.getImg0().isEmpty()) {
             byte[] decodedBytes = Base64.decode(exercise.getImg0(), Base64.DEFAULT);
@@ -109,19 +109,19 @@ public class ExerciseHandler {
         return lst;
     }
 
-    public ArrayList<ArrayList<Exercise>> generateWeeklyWorkout(ArrayList<Exercise> allExercises, 
-                                                              int daysPerWeek, 
-                                                              ArrayList<String> availableEquipment, 
-                                                              ArrayList<String> levels) {
+    public ArrayList<ArrayList<ExerciseModel>> generateWeeklyWorkout(ArrayList<ExerciseModel> allExercises,
+                                                                     int daysPerWeek,
+                                                                     ArrayList<String> availableEquipment,
+                                                                     ArrayList<String> levels) {
         // Filter exercises by levels and equipment
-        ArrayList<Exercise> validExercises = filterExercises(allExercises, availableEquipment, levels);
+        ArrayList<ExerciseModel> validExercises = filterExercises(allExercises, availableEquipment, levels);
         
         // Separate exercises by type
-        ArrayList<Exercise> strengthExercises = new ArrayList<>();
-        ArrayList<Exercise> stretchingExercises = new ArrayList<>();
-        ArrayList<Exercise> cardioExercises = new ArrayList<>();
+        ArrayList<ExerciseModel> strengthExercises = new ArrayList<>();
+        ArrayList<ExerciseModel> stretchingExercises = new ArrayList<>();
+        ArrayList<ExerciseModel> cardioExercises = new ArrayList<>();
         
-        for (Exercise exercise : validExercises) {
+        for (ExerciseModel exercise : validExercises) {
             switch (exercise.getCategory()) {
                 case "strength":
                 case "plyometrics":
@@ -138,7 +138,7 @@ public class ExerciseHandler {
 
         // Create muscle coverage tracking
         HashSet<String> musclesCovered = new HashSet<>();
-        ArrayList<ArrayList<Exercise>> weeklyWorkout = new ArrayList<>();
+        ArrayList<ArrayList<ExerciseModel>> weeklyWorkout = new ArrayList<>();
 
         // Determine exercises per workout based on days per week
         int exercisesPerWorkout = (daysPerWeek == 1) ? 8 : // Full body
@@ -148,7 +148,7 @@ public class ExerciseHandler {
 
         // Generate workouts for each day
         for (int day = 0; day < daysPerWeek; day++) {
-            ArrayList<Exercise> workout = new ArrayList<>();
+            ArrayList<ExerciseModel> workout = new ArrayList<>();
             
             // Add a stretching exercise at the start
             if (!stretchingExercises.isEmpty()) {
@@ -156,7 +156,7 @@ public class ExerciseHandler {
             }
 
             // Add strength/plyometric exercises
-            ArrayList<Exercise> dayExercises = selectExercisesForDay(
+            ArrayList<ExerciseModel> dayExercises = selectExercisesForDay(
                 strengthExercises, 
                 musclesCovered, 
                 exercisesPerWorkout, 
@@ -176,11 +176,11 @@ public class ExerciseHandler {
         return weeklyWorkout;
     }
 
-    private ArrayList<Exercise> filterExercises(ArrayList<Exercise> exercises, 
-                                              ArrayList<String> availableEquipment, 
-                                              ArrayList<String> levels) {
-        ArrayList<Exercise> filtered = new ArrayList<>();
-        for (Exercise exercise : exercises) {
+    private ArrayList<ExerciseModel> filterExercises(ArrayList<ExerciseModel> exercises,
+                                                     ArrayList<String> availableEquipment,
+                                                     ArrayList<String> levels) {
+        ArrayList<ExerciseModel> filtered = new ArrayList<>();
+        for (ExerciseModel exercise : exercises) {
             if (levels.contains(exercise.getLevel()) && 
                 (availableEquipment.contains(exercise.getEquipment()) || 
                  exercise.getEquipment().equals("body only"))) {
@@ -190,19 +190,19 @@ public class ExerciseHandler {
         return filtered;
     }
 
-    private ArrayList<Exercise> selectExercisesForDay(ArrayList<Exercise> exercises, 
-                                                     HashSet<String> musclesCovered, 
-                                                     int exercisesNeeded,
-                                                     int totalDays,
-                                                     int currentDay) {
-        ArrayList<Exercise> selected = new ArrayList<>();
-        ArrayList<Exercise> availableExercises = new ArrayList<>(exercises);
+    private ArrayList<ExerciseModel> selectExercisesForDay(ArrayList<ExerciseModel> exercises,
+                                                           HashSet<String> musclesCovered,
+                                                           int exercisesNeeded,
+                                                           int totalDays,
+                                                           int currentDay) {
+        ArrayList<ExerciseModel> selected = new ArrayList<>();
+        ArrayList<ExerciseModel> availableExercises = new ArrayList<>(exercises);
         Collections.shuffle(availableExercises);
 
         if (totalDays == 1) {
             // Full body workout - select exercises that target different muscles
             while (selected.size() < exercisesNeeded && !availableExercises.isEmpty()) {
-                Exercise bestExercise = findBestExercise(availableExercises, musclesCovered);
+                ExerciseModel bestExercise = findBestExercise(availableExercises, musclesCovered);
                 if (bestExercise != null) {
                     selected.add(bestExercise);
                     availableExercises.remove(bestExercise);
@@ -213,7 +213,7 @@ public class ExerciseHandler {
         } else if (totalDays == 2) {
             // Upper/Lower split
             boolean isUpperDay = currentDay == 0;
-            for (Exercise exercise : availableExercises) {
+            for (ExerciseModel exercise : availableExercises) {
                 boolean isUpperExercise = isUpperBodyExercise(exercise);
                 if ((isUpperDay && isUpperExercise) || (!isUpperDay && !isUpperExercise)) {
                     if (selected.size() < exercisesNeeded) {
@@ -226,7 +226,7 @@ public class ExerciseHandler {
         } else {
             // For 3+ days, focus on complementary muscle groups each day
             while (selected.size() < exercisesNeeded && !availableExercises.isEmpty()) {
-                Exercise exercise = findBestExercise(availableExercises, musclesCovered);
+                ExerciseModel exercise = findBestExercise(availableExercises, musclesCovered);
                 if (exercise != null) {
                     selected.add(exercise);
                     availableExercises.remove(exercise);
@@ -239,11 +239,11 @@ public class ExerciseHandler {
         return selected;
     }
 
-    private Exercise findBestExercise(ArrayList<Exercise> exercises, HashSet<String> musclesCovered) {
-        Exercise bestExercise = null;
+    private ExerciseModel findBestExercise(ArrayList<ExerciseModel> exercises, HashSet<String> musclesCovered) {
+        ExerciseModel bestExercise = null;
         int maxNewMuscles = -1;
 
-        for (Exercise exercise : exercises) {
+        for (ExerciseModel exercise : exercises) {
             HashSet<String> newMuscles = new HashSet<>();
             newMuscles.addAll(exercise.getPrimaryMuscles());
             newMuscles.addAll(exercise.getSecondaryMuscles());
@@ -258,7 +258,7 @@ public class ExerciseHandler {
         return bestExercise;
     }
 
-    private boolean isUpperBodyExercise(Exercise exercise) {
+    private boolean isUpperBodyExercise(ExerciseModel exercise) {
         HashSet<String> upperBodyMuscles = new HashSet<>(Arrays.asList(
             "shoulders", "triceps", "chest", "forearms", "lats",
             "middle back", "neck", "traps", "biceps"
@@ -273,7 +273,7 @@ public class ExerciseHandler {
     }
 
     public interface ExerciseDataCallback {
-        void onExercisesLoaded(ArrayList<Exercise> exercises);
+        void onExercisesLoaded(ArrayList<ExerciseModel> exercises);
         void onError(Exception e);
     }
 }

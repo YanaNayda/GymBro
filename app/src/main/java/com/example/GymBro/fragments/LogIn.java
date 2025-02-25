@@ -1,4 +1,4 @@
-package com.example.gymbro.fragments;
+package com.example.GymBro.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -19,13 +19,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.graphics.Paint;
-import com.example.gymbro.R;
-import com.example.gymbro.activities.MainActivity;
+import com.example.GymBro.R;
+import com.example.GymBro.activities.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-
-import android.telephony.euicc.EuiccManager;
-import android.content.Context;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -184,6 +181,7 @@ public class LogIn extends Fragment {
                 // If valid, call the logInUser method in MainActivity
                 MainActivity newActivity = (MainActivity) getActivity();
                 newActivity.logInUser(view, string_email, string_password);
+                Navigation.findNavController(view).navigate(R.id.action_logIn_to_gymActivity);
             }
         });
 

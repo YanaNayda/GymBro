@@ -1,4 +1,4 @@
-package com.example.gymbro.adapters;
+package com.example.GymBro.adapters;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -9,16 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gymbro.R;
-import com.example.gymbro.models.Equipment;
+import com.example.GymBro.R;
+import com.example.GymBro.models.EquipmentModel;
 
 import java.util.ArrayList;
 
 public class AdapterEquipmentSettings extends RecyclerView.Adapter<AdapterEquipmentSettings.MyViewHolder> {
 
-    private ArrayList<Equipment> equipmentEquipments;
+    private ArrayList<EquipmentModel> equipmentEquipments;
 
-    public AdapterEquipmentSettings(ArrayList<Equipment> equipmentEquipments) {
+    public AdapterEquipmentSettings(ArrayList<EquipmentModel> equipmentEquipments) {
         this.equipmentEquipments = equipmentEquipments;
     }
 
@@ -53,7 +53,7 @@ public class AdapterEquipmentSettings extends RecyclerView.Adapter<AdapterEquipm
     @Override
     public void onBindViewHolder(@NonNull AdapterEquipmentSettings.MyViewHolder holder, int position) {
 
-        Equipment equipment = equipmentEquipments.get(position);
+        EquipmentModel equipment = equipmentEquipments.get(position);
         holder.nameEquipment.setText(equipmentEquipments.get(position).getName());
         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 

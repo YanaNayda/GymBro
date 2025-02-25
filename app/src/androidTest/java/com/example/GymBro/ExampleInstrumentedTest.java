@@ -1,4 +1,4 @@
-package com.example.gymbro;
+package com.example.GymBro;
 
 import android.content.Context;
 

@@ -1,6 +1,6 @@
-package com.example.gymbro.fragments;
+package com.example.GymBro.fragments;
 
-import static com.example.gymbro.R.drawable.edit_txt_invalid;
+import static com.example.GymBro.R.drawable.edit_txt_invalid;
 
 import android.annotation.SuppressLint;
 import android.graphics.Paint;
@@ -14,7 +14,6 @@ import androidx.navigation.Navigation;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,10 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gymbro.R;
-import com.example.gymbro.activities.MainActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.GymBro.R;
+import com.example.GymBro.activities.MainActivity;
 
 import java.util.Objects;
 
@@ -56,7 +53,7 @@ public class Registration extends Fragment {
     private boolean isPassValid= false;
     private boolean isPassConfValid =false;
 
-    private FirebaseAuth mAuth;
+
 
     public Registration() {
         // Required empty public constructor
@@ -70,7 +67,7 @@ public class Registration extends Fragment {
 
             View view = inflater.inflate(R.layout.fragment_registration, container, false);
 
-            mAuth = FirebaseAuth.getInstance();
+
 
             // Initialize views
             Button btn_register = view.findViewById(R.id.btn_registration);

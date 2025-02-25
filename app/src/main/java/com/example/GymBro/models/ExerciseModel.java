@@ -1,9 +1,9 @@
-package com.example.gymbro.models;
+package com.example.GymBro.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Exercise {
+public class ExerciseModel {
     String name;
     String level;
     String equipment;

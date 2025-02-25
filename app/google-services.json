@@ -1,21 +1,22 @@
 {
   "project_info": {
-    "project_number": "1056016370899",
-    "project_id": "gymbro-c8ca6",
-    "storage_bucket": "gymbro-c8ca6.firebasestorage.app"
+    "project_number": "653139203497",
+    "firebase_url": "https://gymbro-4fb99-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "gymbro-4fb99",
+    "storage_bucket": "gymbro-4fb99.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1056016370899:android:483a2100b431c314cf5826",
+        "mobilesdk_app_id": "1:653139203497:android:d1ddfa994d37a924c4a0b8",
         "android_client_info": {
-          "package_name": "com.example.gymbro"
+          "package_name": "com.example.GymBro"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA7hkqyZL1jEOjNTBir2s54oQYwFp5T3OI"
+          "current_key": "AIzaSyBsivXnRxJOjef2dNIPeHSLSRE0uapG0bU"
         }
       ],
       "services": {

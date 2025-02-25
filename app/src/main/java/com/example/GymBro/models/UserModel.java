@@ -1,18 +1,18 @@
-package com.example.gymbro.models;
+package com.example.GymBro.models;
 
-public class User {
+public class UserModel {
     String email;
     String password;
     String phone;
 
 
-    public User (String email, String password, String phone) {
+    public UserModel(String email, String password, String phone) {
         this.email = email;
         this.phone = phone;
         this.password = password;
 
     }
-    public User( ){}
+    public UserModel( ){}
 
     public String getPhone( ) {
         return phone;

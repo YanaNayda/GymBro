@@ -1,25 +1,25 @@
-package com.example.gymbro.fragments;
+package com.example.GymBro.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.gymbro.R;
-import com.example.gymbro.adapters.AdapterEquipmentSettings;
-import com.example.gymbro.classes.DataEquipment;
+import com.example.GymBro.R;
+import com.example.GymBro.adapters.AdapterEquipmentSettings;
+import com.example.GymBro.classes.DataEquipment;
 
-import com.example.gymbro.models.Equipment;
-import com.example.gymbro.models.SettingsModel;
+import com.example.GymBro.models.EquipmentModel;
+import com.example.GymBro.models.SettingsModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +49,7 @@ public class Settings extends Fragment {
     private RecyclerView recyclerSettings;
     private LinearLayoutManager layoutManager;
     private AdapterEquipmentSettings adapter;
-    private ArrayList<Equipment> equipmentSetEquipments;
+    private ArrayList<EquipmentModel> equipmentSetEquipments;
     private ArrayList<SettingsModel> settingsModels;
 
     Button btn_beginner,btn_intermediate,btn_expert;
@@ -118,7 +118,7 @@ public class Settings extends Fragment {
         recyclerSettings.setItemAnimator(new DefaultItemAnimator());
 
         for (int i = 0; i < DataEquipment.nameEquipment.length; i++) {
-            equipmentSetEquipments.add(new Equipment(
+            equipmentSetEquipments.add(new EquipmentModel(
                     DataEquipment.nameEquipment[i],
                     DataEquipment.id_[i]
             ));
@@ -200,7 +200,6 @@ public class Settings extends Fragment {
                 ArrayList<String> selectedDays = new ArrayList<>();
                 ArrayList<String> selectedEquipment = new ArrayList<>();
 
-
                 if (btn_beginner.isSelected()) {
                     selectedLevels.add("Beginner");
                 }
@@ -235,8 +234,8 @@ public class Settings extends Fragment {
                 }
 
 
-                for (Equipment equipment : equipmentSetEquipments) {
-                    if (equipment.isSelected()) {  // Нужно добавить этот метод в Equipment
+                for (EquipmentModel equipment : equipmentSetEquipments) {
+                    if (equipment.isSelected()) {
                         selectedEquipment.add(equipment.getName());
                     }
                 }
@@ -248,11 +247,11 @@ public class Settings extends Fragment {
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
 
-                if (!selectedLevels.isEmpty() || !selectedDays.isEmpty()|| !selectedEquipment.isEmpty()) {
+                if (!selectedLevels.isEmpty() || !selectedDays.isEmpty() || !selectedEquipment.isEmpty()) {
                     SettingsModel model = new SettingsModel(
-                            selectedLevels.toArray(new String[0]),
-                            selectedEquipment.toArray(new String[0]),
-                            selectedDays.toArray(new String[0])
+                            selectedLevels,
+                            selectedEquipment,
+                            selectedDays
                     );
 
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid).child("settings");
@@ -264,18 +263,16 @@ public class Settings extends Fragment {
                             .addOnFailureListener(e ->
                                     Toast.makeText(getActivity(), "Failed to save settings", Toast.LENGTH_SHORT).show()
                             );
-
-                }
-                else {
-                    if(selectedLevels.isEmpty()) {
-                        Toast.makeText(getActivity(), "You must choose level", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (selectedLevels.isEmpty()) {
+                        Toast.makeText(getActivity(), "You must choose a level", Toast.LENGTH_SHORT).show();
                     }
-                    if(selectedDays.isEmpty()) {
+                    if (selectedDays.isEmpty()) {
                         Toast.makeText(getActivity(), "You must choose days", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
+
+                Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
             }
         });
 

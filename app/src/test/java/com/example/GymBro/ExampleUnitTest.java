@@ -1,4 +1,4 @@
-package com.example.gymbro;
+package com.example.GymBro;
 
 import org.junit.Test;
 
