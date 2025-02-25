@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:text="@string/what_difficulty_would_you_like"
         android:textColor="#ffffff"
@@ -320,10 +320,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:backgroundTint="@null"
             android:scrollbars="vertical"
-            />
+            app:backgroundTint="@null" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_select_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.94"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="#F5F5F5"
+        android:text="Select All"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btn_ready"

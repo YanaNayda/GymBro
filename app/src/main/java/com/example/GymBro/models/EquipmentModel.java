@@ -4,16 +4,14 @@ import java.io.Serializable;
 
 public class EquipmentModel implements Serializable {
 
-    private String name;
-    private int id;
+    private final String name; // Make final if immutable
+    private final int id;      // Make final if immutable
     private boolean isSelected;
 
     public EquipmentModel(String name, int id) {
         this.name = name;
         this.id = id;
-        this.isSelected=false;
-    }
-    public EquipmentModel() {
+        this.isSelected = false; // Default to false
     }
 
     public String getName() {
@@ -24,15 +22,6 @@ public class EquipmentModel implements Serializable {
         return id;
     }
 
-    public int setId(int id) {
-         this.id= id;
-        return id;
-    }
-
-    public void setName(String name) {
-       this.name = name;
-    }
-
     public boolean isSelected() {
         return isSelected;
     }
@@ -41,6 +30,12 @@ public class EquipmentModel implements Serializable {
         isSelected = selected;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "EquipmentModel{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                ", isSelected=" + isSelected +
+                '}';
+    }
 }

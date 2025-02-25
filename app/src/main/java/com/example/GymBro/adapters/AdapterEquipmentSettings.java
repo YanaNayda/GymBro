@@ -26,12 +26,9 @@ public class AdapterEquipmentSettings extends RecyclerView.Adapter<AdapterEquipm
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nameEquipment;
-
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nameEquipment = itemView.findViewById(R.id.text_name_equipment);
-            // imageEquipment = itemView.findViewById(R.id.imageView2);
         }
     }
 
@@ -52,20 +49,25 @@ public class AdapterEquipmentSettings extends RecyclerView.Adapter<AdapterEquipm
 
     @Override
     public void onBindViewHolder(@NonNull AdapterEquipmentSettings.MyViewHolder holder, int position) {
-
         EquipmentModel equipment = equipmentEquipments.get(position);
-        holder.nameEquipment.setText(equipmentEquipments.get(position).getName());
-        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        holder.nameEquipment.setText(equipment.getName());
 
+        // Update button appearance based on selection state
+        if (equipment.isSelected()) {
+            // Selected state: Make the button appear "pressed"
+            holder.nameEquipment.setBackgroundColor(Color.LTGRAY); // Change background color
+            holder.nameEquipment.setTextColor(Color.WHITE);
+        } else {
+            // Unselected state: Make the button appear "unpressed"
+            holder.nameEquipment.setBackgroundColor(Color.TRANSPARENT); // Reset background color
+            holder.nameEquipment.setTextColor(Color.BLACK);
+        }
 
-        holder.itemView.setOnClickListener(view -> {
-            view.setSelected(!view.isSelected());
+        // Set click listener to toggle selection state
+        holder.nameEquipment.setOnClickListener(view -> {
+            // Toggle selection state
             equipment.setSelected(!equipment.isSelected());
-            notifyItemChanged(position);
-
-            // You can also pass other data if needed
-            // bundle.putInt("imageResId", selectedItem.getImageResId());
-            // Example: Navigation.findNavController(view).navigate(R.id.your_destination, bundle);
+            notifyItemChanged(position); // Refresh the item view
         });
     }
 
