@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/motivation"
-    tools:context=".fragments.Motivation">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:layout_height="match_parent">
+    <!-- Background ImageView -->
+    <ImageView
+        android:id="@+id/backgroundImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/background" />
+    <!-- TextView to display the animal level -->
+    <TextView
+        android:id="@+id/animalLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Animal Level: 0"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"/>
 
-</FrameLayout>
+    <!-- ImageView to display the animal image -->
+    <ImageView
+        android:id="@+id/animalImageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/animalLevel"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"/>
+
+    <!-- TextView to display the levels left until the next picture -->
+    <TextView
+        android:id="@+id/levelsLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Levels left to evolve: 0"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/animalImageView"
+        android:layout_marginTop="20dp"/>
+</RelativeLayout>

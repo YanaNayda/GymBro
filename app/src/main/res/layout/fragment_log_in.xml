@@ -122,64 +122,13 @@
         android:id="@+id/btn_to_registration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:layout_weight="0.1"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:text="@string/no_account_yet_create_now" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="0.1">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/white"
-            tools:ignore="NestedWeights" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/or"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/white" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_google_sign_in"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_back"
-        android:layout_weight="0.2"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="40dp"
-        android:textSize="20sp"
-        android:textColor="#000000"
-        app:backgroundTint="@null"
-        android:drawableEnd="@drawable/googleg_standard_color_18"
-        android:text="@string/sign_in_with_google" />
+        android:layout_weight="0.1"
+        android:background="#00FFFFFF"
+        android:text="@string/no_account_yet_create_now"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
 </LinearLayout>
