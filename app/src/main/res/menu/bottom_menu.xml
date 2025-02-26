@@ -4,25 +4,20 @@
 
     <item
         android:id="@+id/workout_button"
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/img_lock_close"
         android:title="Workout"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/course_button"
-        android:icon="@drawable/ic_android_black_24dp"
-        android:title="Course"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/exercise_button"
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/img_lock_close"
         android:title="Exercise"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/motivation_button"
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/img_lock_close"
         android:title="Motivation"
         app:showAsAction="ifRoom" />
 

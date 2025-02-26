@@ -14,6 +14,16 @@ public class ExerciseModel {
     String img0;
     String img1;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    private boolean isSelected;
+
     public String getName() {
         return name;
     }

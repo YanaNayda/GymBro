@@ -1,5 +1,9 @@
 package com.example.GymBro.activities;
 
+import static android.app.PendingIntent.getActivity;
+
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,17 +13,25 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.GymBro.R;
-import com.example.GymBro.fragments.Course;
 import com.example.GymBro.fragments.Exercise;
 import com.example.GymBro.fragments.Workout;
 import com.example.GymBro.fragments.Motivation;
 import com.example.GymBro.fragments.Settings;
+import com.example.GymBro.handlers.ExerciseHandler;
+import com.example.GymBro.models.ExerciseModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class GymActivity extends AppCompatActivity {
 
+
+    ExerciseHandler handler;
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +43,24 @@ public class GymActivity extends AppCompatActivity {
 
         // Set the Toolbar as the ActionBar
         setSupportActionBar(toolbar);
+        Intent intent = new Intent(GymActivity.this, MainActivity.class);
+        startActivity(intent);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_layout, new Workout())
-                    .commit();
-        }
+        //layoutManager = new LinearLayoutManager(getContext());
+        //recycleExercise.setLayoutManager(layoutManager);
+        //recycleExercise.setItemAnimator(new DefaultItemAnimator());
+
+        ExerciseHandler handler;
+        //handler = new ExerciseHandler();
+
+        //MainActivity activity = (MainActivity) getActivity();
+
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
 
             if (item.getItemId() == R.id.workout_button) {
                 selectedFragment = new Workout();
-            } else if (item.getItemId() == R.id.course_button) {
-                selectedFragment = new Course();
             } else if (item.getItemId() == R.id.exercise_button) {
                 selectedFragment = new Exercise();
             } else if (item.getItemId() == R.id.motivation_button) {
@@ -60,6 +76,8 @@ public class GymActivity extends AppCompatActivity {
 
             return true;
         });
+
+
     }
 
     @Override
@@ -74,9 +92,6 @@ public class GymActivity extends AppCompatActivity {
 
         if (itemId == R.id.settings_button) {
             startActivity(new Intent(this, Settings.class));
-            return true;
-        } else if (itemId == R.id.account_button) {
-            startActivity(new Intent(this, Settings.class)); // Replace with the correct activity if needed
             return true;
         } else {
             return super.onOptionsItemSelected(item);

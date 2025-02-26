@@ -46,16 +46,8 @@
         android:name="com.example.GymBro.activities.GymActivity"
         android:label="activity_gym"
         tools:layout="@layout/activity_gym" />
-    <fragment
-        android:id="@+id/course2"
-        android:name="com.example.GymBro.fragments.Course"
-        android:label="fragment_course"
-        tools:layout="@layout/fragment_course" />
-    <fragment
-        android:id="@+id/home2"
-        android:name="com.example.GymBro.fragments.Workout"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+
+
     <fragment
         android:id="@+id/motivation2"
         android:name="com.example.GymBro.fragments.Motivation"
