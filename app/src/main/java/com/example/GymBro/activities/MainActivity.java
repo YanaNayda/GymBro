@@ -74,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
+
+        //  ExerciseHandler handler = GymActivity.handler;
+        if (handler != null) {
+            ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+        }
+
     }
 
     public ExerciseHandler getHandler() {

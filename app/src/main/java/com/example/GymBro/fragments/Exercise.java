@@ -3,12 +3,31 @@ package com.example.GymBro.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.GymBro.R;
+import com.example.GymBro.activities.GymActivity;
+import com.example.GymBro.activities.MainActivity;
+import com.example.GymBro.adapters.AdapterEquipmentSettings;
+import com.example.GymBro.adapters.AdapterExercise;
+import com.example.GymBro.classes.DataEquipment;
+import com.example.GymBro.handlers.ExerciseHandler;
+import com.example.GymBro.models.EquipmentModel;
+import com.example.GymBro.models.ExerciseModel;
+import com.example.GymBro.models.SettingsModel;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +44,15 @@ public class Exercise extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recycleExercise;
+    private LinearLayoutManager layoutManager;
+    private AdapterExercise adapter;
+    private ArrayList<ExerciseModel> ExerciseSetExercises;
+
+    public static ExerciseHandler handler;
+
+
 
     public Exercise() {
         // Required empty public constructor
@@ -57,10 +85,46 @@ public class Exercise extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exercise, container, false);
+        View view = inflater.inflate(R.layout.fragment_exercise, container, false);
+
+
+        recycleExercise = view.findViewById(R.id.recycle_view_exercise);
+
+        recycleExercise.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recycleExercise.setLayoutManager(layoutManager);
+        recycleExercise.setItemAnimator(new DefaultItemAnimator());
+
+
+        //handler = new ExerciseHandler();
+
+
+        //GymActivity activity = (GymActivity) getActivity();
+
+        //if (activity != null) {
+        //    handler = activity.getHendler();
+        //    ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+//
+//
+        //    if (exercises != null && !exercises.isEmpty()) {
+        //        adapter = new AdapterExercise(exercises);
+        //        recycleExercise.setAdapter(adapter);
+        //    } else {
+        //        Log.e("FragmentExercise", "Exercises list is empty!");
+        //    }
+        //}
+        return view;
     }
+
+    public RecyclerView getRecyclerView() {
+        return recycleExercise;
+    }
+
+
+
+
 }
