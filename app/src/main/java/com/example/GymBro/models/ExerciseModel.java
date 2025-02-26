@@ -15,6 +15,26 @@ public class ExerciseModel {
     String img0;
     String img1;
 
+    public ExerciseModel(String name, String level, String equipment, String category, ArrayList<String> primaryMuscles, ArrayList<String> secondaryMuscles, String instructions, String img0, String img1, boolean isSelected) {
+        this.name = name;
+        this.level = level;
+        this.equipment = equipment;
+        this.category = category;
+        this.primaryMuscles = primaryMuscles;
+        this.secondaryMuscles = secondaryMuscles;
+        this.instructions = instructions;
+        this.img0 = img0;
+        this.img1 = img1;
+        this.isSelected = isSelected;
+    }
+
+    public ExerciseModel(String name) {
+        this.name = name;
+
+    }
+    public ExerciseModel() {
+    }
+
     public boolean isSelected() {
         return isSelected;
     }

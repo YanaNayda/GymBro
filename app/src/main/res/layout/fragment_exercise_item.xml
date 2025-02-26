@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gym_bro_back_exercise"
+    tools:context=".fragments.ExerciseItem">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginTop="20dp"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/txt_name_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:text="Name:" />
+
+        <TextView
+            android:id="@+id/txt_level_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:layout_marginTop="5dp"
+            android:text="Exercise Level:" />
+
+        <TextView
+            android:id="@+id/txt_category_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:text="Category:" />
+
+        <TextView
+            android:id="@+id/txt_equipment_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:layout_marginTop="5dp"
+            android:text="Equipment:" />
+
+        <TextView
+            android:id="@+id/txt_primary_muscles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:layout_marginTop="5dp"
+            android:text="Primary Muscles:" />
+
+        <TextView
+            android:id="@+id/txt_secondary_muscles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_marginTop="5dp"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:text="Secondary Muscles:" />
+        <TextView
+            android:id="@+id/txt_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textColor="#000000"
+            android:background="@drawable/edit_txt_back"
+            android:layout_marginTop="5dp"
+            android:text="Instructions:" />
+    </LinearLayout>
+
+</FrameLayout>

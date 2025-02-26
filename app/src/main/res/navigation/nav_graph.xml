@@ -57,6 +57,24 @@
         android:id="@+id/exercise2"
         android:name="com.example.GymBro.fragments.Exercise"
         android:label="fragment_exercise"
-        tools:layout="@layout/fragment_exercise" />
+        tools:layout="@layout/fragment_exercise" >
+        <action
+            android:id="@+id/action_exercise2_to_exerciseItem"
+            app:destination="@id/exerciseItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseItem"
+        android:name="com.example.GymBro.fragments.ExerciseItem"
+        android:label="fragment_exercise_item"
+        tools:layout="@layout/fragment_exercise_item" />
+    <fragment
+        android:id="@+id/workout"
+        android:name="com.example.GymBro.fragments.Workout"
+        android:label="fragment_workout"
+        tools:layout="@layout/fragment_workout" >
+        <action
+            android:id="@+id/action_workout_to_exerciseItem"
+            app:destination="@id/exerciseItem" />
+    </fragment>
 
 </navigation>

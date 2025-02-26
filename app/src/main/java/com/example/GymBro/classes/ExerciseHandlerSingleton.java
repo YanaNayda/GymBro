@@ -2,9 +2,11 @@ package com.example.GymBro.classes;
 
 import android.content.Context;
 
+import com.example.GymBro.fragments.Exercise;
 import com.example.GymBro.handlers.ExerciseHandler;
 
 public class ExerciseHandlerSingleton {
+
     private static ExerciseHandlerSingleton instance;
     private ExerciseHandler handler;
 
@@ -19,6 +21,7 @@ public class ExerciseHandlerSingleton {
         }
         return instance;
     }
+
 
     public ExerciseHandler getHandler() {
         return handler;

@@ -45,12 +45,15 @@ public class GymActivity extends AppCompatActivity {
         ExerciseHandlerSingleton handlerSingleton = ExerciseHandlerSingleton.getInstance(this);
         ExerciseHandler handler = handlerSingleton.getHandler();
 
+
         // Now you can use the handler
         if (handler != null) {
             Log.d("GymActivity", "ExerciseHandler retrieved successfully");
-            ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+            ArrayList <ExerciseModel> exercises = handler.getExercisesList();
+
             if (exercises != null) {
                 Log.d("GymActivity", "Exercises loaded: " + exercises.size());
+
             } else {
                 Log.e("GymActivity", "Exercises list is null");
             }
@@ -58,8 +61,12 @@ public class GymActivity extends AppCompatActivity {
             Log.e("GymActivity", "ExerciseHandler is null");
         }
 
+
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
+
+
 
             if (item.getItemId() == R.id.workout_button) {
                 selectedFragment = new Workout();

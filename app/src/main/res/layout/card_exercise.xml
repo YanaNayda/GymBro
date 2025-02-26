@@ -16,13 +16,6 @@
         android:background="@drawable/btn_back_choose"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/image_exercise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:padding="10dp"
-            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/text_name_exercise"

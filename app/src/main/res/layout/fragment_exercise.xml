@@ -13,45 +13,36 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00FFFFFF"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/textExercise"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="15dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:text="Exercise"
                 android:textColor="#FFFF"
-                android:textSize="20sp"
+                android:textSize="27sp"
                 android:textStyle="bold" />
 
+            <SearchView
+                android:id="@+id/searchViewExercise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_txt_back"
+                android:queryHint="Search Exercises" />
+
         </LinearLayout>
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/searchViewProduct"
-            android:background="@drawable/edit_txt_back"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1" >
-
-        </SearchView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.2"
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -60,11 +51,10 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:padding="8dp"
-                android:background="#00FFFFFF"
-           />
+                android:layout_marginTop="10dp"
+                android:background="#00FFFFFF" />
+
         </LinearLayout>
-
-
 
     </LinearLayout>
 
