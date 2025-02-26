@@ -91,7 +91,6 @@ public class LogIn extends Fragment {
 
         // Initialize buttons and EditTexts
         Button btn_forgot_password = view.findViewById(R.id.btn_forgot_password);
-        Button btn_signIn = view.findViewById(R.id.btn_google_sign_in);
         Button btn_log_in = view.findViewById(R.id.btn_sign_in);
         Button btn_register = view.findViewById(R.id.btn_to_registration);
 
