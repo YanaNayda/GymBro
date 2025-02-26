@@ -53,6 +53,15 @@ public class ExerciseHandler {
     private final ExecutorService executor;
     private final Handler mainHandler;
     private ArrayList<ExerciseModel> exercisesList;
+
+    public ArrayList<ArrayList<ExerciseModel>> getWeeklyWorkout() {
+        return weeklyWorkout;
+    }
+
+    public void setWeeklyWorkout(ArrayList<ArrayList<ExerciseModel>> weeklyWorkout) {
+        this.weeklyWorkout = weeklyWorkout;
+    }
+
     private ArrayList<ArrayList<ExerciseModel>> weeklyWorkout;
 
     public interface ExerciseLoadCallback {

@@ -1,5 +1,6 @@
 package com.example.GymBro.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.GymBro.R;
+import com.example.GymBro.classes.ExerciseHandlerSingleton;
 import com.example.GymBro.handlers.ExerciseHandler;
 import com.example.GymBro.models.ExerciseModel;
 import com.example.GymBro.models.UserModel;
@@ -56,15 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        handler = new ExerciseHandler(this);
+
+        // Initialize the Singleton and get the ExerciseHandler
+        ExerciseHandlerSingleton handlerSingleton = ExerciseHandlerSingleton.getInstance(this);
+        handler = handlerSingleton.getHandler();
 
         handler.fetchAllExercises(new ExerciseHandler.ExerciseLoadCallback() {
             @Override
             public void onExercisesLoaded(ArrayList<ExerciseModel> exercises) {
                 Log.d("MainActivity", "Loaded " + exercises.size() + " exercises successfully!");
-                Snackbar.make(findViewById(android.R.id.content), 
-                            "Loaded " + exercises.size() + " exercises successfully!", 
-                            Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content),
+                        "Loaded " + exercises.size() + " exercises successfully!",
+                        Snackbar.LENGTH_LONG).show();
                 handler.setExercisesList(exercises);
             }
 
@@ -72,18 +77,12 @@ public class MainActivity extends AppCompatActivity {
             public void onError(Exception e) {
                 Log.e("MainActivity", "Error loading exercises", e);
                 Snackbar.make(findViewById(android.R.id.content),
-                            "Error loading exercises: " + e.getMessage(),
-                            Snackbar.LENGTH_LONG)
+                                "Error loading exercises: " + e.getMessage(),
+                                Snackbar.LENGTH_LONG)
                         .setBackgroundTint(getResources().getColor(android.R.color.holo_red_light, getTheme()))
                         .show();
             }
         });
-
-        //  ExerciseHandler handler = GymActivity.handler;
-        if (handler != null) {
-            ArrayList<ExerciseModel> exercises = handler.getExercisesList();
-        }
-
     }
 
     public ExerciseHandler getHandler() {
@@ -114,9 +113,13 @@ public class MainActivity extends AppCompatActivity {
                                             Log.d("Workout", "Day " + (i + 1) + ": " + weeklyWorkout.get(i));
                                         }
                                     }
+                                    handler.setWeeklyWorkout(weeklyWorkout);
+                                    // Set the workout in the Singleton (if needed)
+                                    //WorkoutDataHolder.getInstance().setWorkout(weeklyWorkout);
 
-                                    // Navigate to GymActivity only if the workout is loaded successfully
-                                    navController.navigate(R.id.action_logIn_to_gymActivity);
+                                    // Navigate to GymActivity
+                                    Intent intent = new Intent(MainActivity.this, GymActivity.class);
+                                    startActivity(intent);
                                 }
 
                                 @Override

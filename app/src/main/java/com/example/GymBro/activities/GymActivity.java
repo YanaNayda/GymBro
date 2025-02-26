@@ -2,22 +2,19 @@ package com.example.GymBro.activities;
 
 import static android.app.PendingIntent.getActivity;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.GymBro.R;
+import com.example.GymBro.classes.ExerciseHandlerSingleton;
 import com.example.GymBro.fragments.Exercise;
 import com.example.GymBro.fragments.Workout;
 import com.example.GymBro.fragments.Motivation;
@@ -43,18 +40,23 @@ public class GymActivity extends AppCompatActivity {
 
         // Set the Toolbar as the ActionBar
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(GymActivity.this, MainActivity.class);
-        startActivity(intent);
 
-        //layoutManager = new LinearLayoutManager(getContext());
-        //recycleExercise.setLayoutManager(layoutManager);
-        //recycleExercise.setItemAnimator(new DefaultItemAnimator());
+        // Retrieve the ExerciseHandler from the Singleton
+        ExerciseHandlerSingleton handlerSingleton = ExerciseHandlerSingleton.getInstance(this);
+        ExerciseHandler handler = handlerSingleton.getHandler();
 
-        ExerciseHandler handler;
-        //handler = new ExerciseHandler();
-
-        //MainActivity activity = (MainActivity) getActivity();
-
+        // Now you can use the handler
+        if (handler != null) {
+            Log.d("GymActivity", "ExerciseHandler retrieved successfully");
+            ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+            if (exercises != null) {
+                Log.d("GymActivity", "Exercises loaded: " + exercises.size());
+            } else {
+                Log.e("GymActivity", "Exercises list is null");
+            }
+        } else {
+            Log.e("GymActivity", "ExerciseHandler is null");
+        }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -76,8 +78,6 @@ public class GymActivity extends AppCompatActivity {
 
             return true;
         });
-
-
     }
 
     @Override
