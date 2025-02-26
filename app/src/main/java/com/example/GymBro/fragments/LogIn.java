@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.graphics.Paint;
 import com.example.GymBro.R;
 import com.example.GymBro.activities.MainActivity;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -164,6 +165,7 @@ public class LogIn extends Fragment {
 
         // Set up the click listener for the sign-in button
         btn_log_in.setOnClickListener(v -> {
+            MainActivity newActivity = (MainActivity) getActivity();
             // Get email and password from the EditText fields
             String string_email = edit_email.getText().toString();
             String string_password = edit_password.getText().toString();
@@ -177,27 +179,45 @@ public class LogIn extends Fragment {
                 error_password.setText(R.string.invalid_password);
                 edit_password.setBackgroundResource(R.drawable.edit_txt_invalid);
             }
-            if (isEmailValid && isPassValid) {
+            assert newActivity != null;
+            if (newActivity.getHandler().getExercisesList() == null)
+                Snackbar.make(newActivity.findViewById(android.R.id.content),
+                                "Did not fetch exercises yet, wait a couple of seconds",
+                                Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(getResources().getColor(android.R.color.holo_red_light, newActivity.getTheme()))
+                        .show();
+            else if (isEmailValid && isPassValid) {
                 // If valid, call the logInUser method in MainActivity
-                MainActivity newActivity = (MainActivity) getActivity();
                 newActivity.logInUser(view, string_email, string_password);
             }
         });
 
         // Set up the click listener for the register button to navigate to the registration screen
-        btn_register.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_logIn_to_registration));
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity newActivity = (MainActivity) getActivity();
+                assert newActivity != null;
+                if (newActivity.getHandler().getExercisesList() == null)
+                    Snackbar.make(newActivity.findViewById(android.R.id.content),
+                                    "Did not fetch exercises yet, wait a couple of seconds",
+                                    Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(android.R.color.holo_red_light, newActivity.getTheme()))
+                            .show();
+                else
+                    Navigation.findNavController(view).navigate(R.id.action_logIn_to_registration);
+            }
+        });
 
         btn_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (edit_email.getText().toString().isEmpty()){
                     error_email.setText(R.string.please_enter_your_email);
-                }else{
+                }else {
                     MainActivity newActivity = (MainActivity) getActivity();
                     newActivity.sendPasswordResetEmail(v, edit_email.getText().toString());
                 }
-
-
             }
         });
 

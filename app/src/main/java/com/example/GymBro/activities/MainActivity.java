@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.GymBro.R;
@@ -30,7 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,14 +84,44 @@ public class MainActivity extends AppCompatActivity {
         return handler;
     }
 
-    public void logInUser(View view, String email, String password){
+    public void logInUser(View view, String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.action_logIn_to_gymActivity);
+
+                            // Get the NavController from the view
+                            NavController navController = Navigation.findNavController(view);
+
+                            // Call getWeeklyWorkout with both callback and NavController
+                            handler.getWeeklyWorkout(new ExerciseHandler.WorkoutCallback() {
+                                @Override
+                                public void onWorkoutLoaded(ArrayList<ArrayList<ExerciseModel>> weeklyWorkout) {
+                                    // Handle the loaded workout
+                                    if (weeklyWorkout == null || weeklyWorkout.isEmpty()) {
+                                        Log.d("Workout", "No workout found or generated");
+                                    } else {
+                                        Log.d("Workout", "Workout loaded successfully");
+                                        for (int i = 0; i < weeklyWorkout.size(); i++) {
+                                            Log.d("Workout", "Day " + (i + 1) + ": " + weeklyWorkout.get(i));
+                                        }
+                                    }
+
+                                    // Navigate to GymActivity only if the workout is loaded successfully
+                                    navController.navigate(R.id.action_logIn_to_gymActivity);
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    // Handle errors
+                                    Log.e("Workout", "Error loading workout: " + e.getMessage());
+
+                                    // If there's an error (e.g., settings not found), do not navigate to GymActivity
+                                    // The getWeeklyWorkout method will handle navigating to SettingsFragment
+                                }
+                            }, navController); // Pass the NavController here
                         } else {
                             Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
                         }
@@ -144,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users").child("" + userId);
 
-        myRef.setValue("Hello, World!");
-
         UserModel newUser = new UserModel(
                 emailField.getText().toString(),
                 passwordField.getText().toString(),
@@ -182,6 +214,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    public String getCurrentWeekKey() {
+        // Get the current date using Calendar
+        Calendar calendar = Calendar.getInstance();
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int weekOfMonth = (dayOfMonth - 1) / 7 + 1;
 
+        // Format the month name (e.g., "Jan", "Feb")
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.US); // Explicit locale
+        String monthName = monthFormat.format(calendar.getTime());
 
+        // Get the year
+        int year = calendar.get(Calendar.YEAR);
+
+        // Return the formatted string with an explicit locale
+        return String.format(Locale.US, "week%d_%s_%d", weekOfMonth, monthName, year);
+    }
 }

@@ -12,6 +12,8 @@ import android.util.JsonToken;
 import com.example.GymBro.R;
 import com.example.GymBro.models.ExerciseModel;
 
+import com.example.GymBro.models.SettingsModel;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,30 +24,36 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ExerciseHandler {
     private Context context;
     private final DatabaseReference dbRef;
     private final ExecutorService executor;
     private final Handler mainHandler;
-    private boolean isLoaded;
     private ArrayList<ExerciseModel> exercisesList;
+    private ArrayList<ArrayList<ExerciseModel>> weeklyWorkout;
 
     public interface ExerciseLoadCallback {
         void onExercisesLoaded(ArrayList<ExerciseModel> exercises);
@@ -59,7 +67,7 @@ public class ExerciseHandler {
 
     public ExerciseHandler(Context context) {
         this.context = context;
-        this.isLoaded = false;
+        this.weeklyWorkout = null;
         this.dbRef = FirebaseDatabase.getInstance("https://gymbro-4fb99-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("Users");
         this.executor = Executors.newSingleThreadExecutor();
@@ -72,14 +80,6 @@ public class ExerciseHandler {
 
     public void setExercisesList(ArrayList<ExerciseModel> exercisesList) {
         this.exercisesList = exercisesList;
-    }
-
-    public boolean isLoaded() {
-        return isLoaded;
-    }
-
-    public void setLoaded(boolean loaded) {
-        isLoaded = loaded;
     }
 
     public void fetchAllExercises(ExerciseLoadCallback callback) {
@@ -108,7 +108,6 @@ public class ExerciseHandler {
                         reader.skipValue();
                     }
                 }
-                this.isLoaded = true;
                 reader.endObject(); // End of JSON
                 reader.close();
 
@@ -384,72 +383,134 @@ public class ExerciseHandler {
         return false;
     }
 
-    /*public void getOrCreateWeeklyWorkout(ArrayList<ExerciseModel> allExercises,
-                                         int daysPerWeek,
-                                         ArrayList<String> availableEquipment,
-                                         ArrayList<String> levels,
-                                         WorkoutCallback callback) {
-
+    public void getWeeklyWorkout(WorkoutCallback callback, NavController navController) {
+        // Get the current user ID and week key
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String weekKey = getCurrentWeekKey();
 
-        DatabaseReference workoutRef = dbRef.child(userId).child(weekKey);
+        // Reference to the user's node in Firebase
+        DatabaseReference userRef = dbRef.child(userId);
 
-        workoutRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Fetch both the workout and settings in one go
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
+                // Check if settings exist
+                DataSnapshot settingsSnapshot = snapshot.child("settings");
+                if (!settingsSnapshot.exists()) {
+                    // Settings do not exist, navigate to Settings Fragment
+                    mainHandler.post(() -> {
+                        if (navController != null) {
+                            navController.navigate(R.id.action_logIn_to_settings);
+                        } else {
+                            callback.onError(new Exception("Settings not found and NavController is null"));
+                        }
+                    });
+                    return; // Exit the method early
+                }
+
+                // Settings exist, load them
+                SettingsModel settings = settingsSnapshot.getValue(SettingsModel.class);
+                if (settings == null) {
+                    // Settings are null, navigate to Settings Fragment
+                    mainHandler.post(() -> {
+                        if (navController != null) {
+                            navController.navigate(R.id.action_logIn_to_settings);
+                        } else {
+                            callback.onError(new Exception("Settings are null and NavController is null"));
+                        }
+                    });
+                    return; // Exit the method early
+                }
+
+                // Check if the weekly workout exists
+                DataSnapshot workoutSnapshot = snapshot.child(weekKey);
+                if (workoutSnapshot.exists()) {
                     // Workout exists, load it
                     ArrayList<ArrayList<ExerciseModel>> weeklyWorkout = new ArrayList<>();
 
-                    for (int i = 0; i < daysPerWeek; i++) {
+                    // Iterate through each day in the snapshot
+                    for (DataSnapshot daySnapshot : workoutSnapshot.getChildren()) {
                         ArrayList<ExerciseModel> dayWorkout = new ArrayList<>();
-                        DataSnapshot daySnapshot = snapshot.child("day" + i);
 
+                        // Iterate through each exercise in the day
                         for (DataSnapshot exerciseSnapshot : daySnapshot.getChildren()) {
                             ExerciseModel exercise = exerciseSnapshot.getValue(ExerciseModel.class);
-                            dayWorkout.add(exercise);
+                            if (exercise != null) {
+                                dayWorkout.add(exercise);
+                            }
                         }
+
+                        // Add the day's workout to the weekly workout
                         weeklyWorkout.add(dayWorkout);
                     }
 
+                    // Return the loaded workout via callback
                     mainHandler.post(() -> callback.onWorkoutLoaded(weeklyWorkout));
-
                 } else {
-                    // Create new workout
-                    ArrayList<ArrayList<ExerciseModel>> newWorkout = generateWeeklyWorkout(
-                            allExercises, daysPerWeek, availableEquipment, levels);
+                    // Workout does not exist, generate a new workout based on the settings
+                    ArrayList<ArrayList<ExerciseModel>> generatedWorkout = generateWeeklyWorkout(
+                            getExercisesList(),
+                            settings.getDays(),
+                            settings.getEquipment(),
+                            settings.getLevel()
+                    );
 
-                    // Save to Firebase
-                    Map<String, Object> updates = new HashMap<>();
-                    for (int i = 0; i < newWorkout.size(); i++) {
-                        updates.put("day" + i, newWorkout.get(i));
-                    }
+                    // Write the generated workout to Firebase
+                    writeWeeklyWorkoutToFirebase(userId, weekKey, generatedWorkout);
 
-                    workoutRef.updateChildren(updates)
-                            .addOnSuccessListener(aVoid -> {
-                                mainHandler.post(() -> callback.onWorkoutLoaded(newWorkout));
-                            })
-                            .addOnFailureListener(e -> {
-                                mainHandler.post(() -> callback.onError(e));
-                            });
+                    // Return the generated workout via callback
+                    mainHandler.post(() -> callback.onWorkoutLoaded(generatedWorkout));
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Handle Firebase errors
                 mainHandler.post(() -> callback.onError(error.toException()));
             }
         });
-    }*/
+    }
 
-    @SuppressLint("NewApi")
-    private String getCurrentWeekKey() {
-        LocalDate date = LocalDate.now();
-        int weekOfMonth = (date.getDayOfMonth() - 1) / 7 + 1;
-        return String.format("week%d_%s_%d",
-                weekOfMonth,
-                date.format(DateTimeFormatter.ofPattern("MMM")),
-                date.getYear());
+    // Helper method to write the weekly workout to Firebase
+    private void writeWeeklyWorkoutToFirebase(String userId, String weekKey, ArrayList<ArrayList<ExerciseModel>> weeklyWorkout) {
+        DatabaseReference workoutRef = dbRef.child(userId).child(weekKey);
+
+        // Convert the weekly workout to a format suitable for Firebase
+        Map<String, Object> workoutMap = new HashMap<>();
+        for (int i = 0; i < weeklyWorkout.size(); i++) {
+            ArrayList<ExerciseModel> dayWorkout = weeklyWorkout.get(i);
+            if (dayWorkout != null) {
+                // Use the day index as the key (e.g., "0", "1", "2", etc.)
+                workoutMap.put(String.valueOf(i), dayWorkout);
+            }
+        }
+
+        // Write the workout to Firebase
+        workoutRef.setValue(workoutMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firebase", "Weekly workout written to Firebase successfully");
+                    } else {
+                        Log.e("Firebase", "Failed to write weekly workout to Firebase", task.getException());
+                    }
+                });
+    }
+
+    public String getCurrentWeekKey() {
+        // Get the current date using Calendar
+        Calendar calendar = Calendar.getInstance();
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int weekOfMonth = (dayOfMonth - 1) / 7 + 1;
+
+        // Format the month name (e.g., "Jan", "Feb")
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.US); // Explicit locale
+        String monthName = monthFormat.format(calendar.getTime());
+
+        // Get the year
+        int year = calendar.get(Calendar.YEAR);
+
+        // Return the formatted string with an explicit locale
+        return String.format(Locale.US, "week%d_%s_%d", weekOfMonth, monthName, year);
     }
 }

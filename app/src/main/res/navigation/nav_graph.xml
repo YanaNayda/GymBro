@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_logIn_to_gymActivity"
             app:destination="@id/gymActivity" />
+        <action
+            android:id="@+id/action_logIn_to_settings"
+            app:destination="@id/settings" />
     </fragment>
     <fragment
         android:id="@+id/registration"

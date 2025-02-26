@@ -28,7 +28,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -293,35 +296,63 @@ public class Settings extends Fragment {
                 String uid = user.getUid();
 
                 if (!selectedLevels.isEmpty() || !selectedDays.isEmpty() || !selectedEquipment.isEmpty()) {
+                    // Create the settings model
                     SettingsModel model = new SettingsModel(
                             selectedLevels,
                             selectedEquipment,
                             selectedDays
                     );
 
+                    // Get the ExerciseHandler and generate the weekly workout
                     MainActivity newActivity = (MainActivity) getActivity();
+                    assert newActivity != null;
                     ExerciseHandler handler = newActivity.getHandler();
                     ArrayList<ExerciseModel> exercises = handler.getExercisesList();
-                    ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(exercises, selectedDays, selectedEquipment, selectedLevels);
+                    ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(
+                            exercises, selectedDays, selectedEquipment, selectedLevels
+                    );
 
+                    // Get references to the Firebase nodes
+                    DatabaseReference settingsRef = FirebaseDatabase.getInstance()
+                            .getReference("Users")
+                            .child(uid)
+                            .child("settings");
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("settings");
-                    databaseReference.setValue(model)
-                            .addOnSuccessListener(aVoid ->
-                                    Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show()
-                            )
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(getActivity(), "Failed to save settings", Toast.LENGTH_SHORT).show()
-                            );
+                    DatabaseReference workoutRef = FirebaseDatabase.getInstance()
+                            .getReference("Users")
+                            .child(uid)
+                            .child(handler.getCurrentWeekKey());
 
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("weeklyExercise");
-                    databaseReference.setValue(generatedList)
-                            .addOnSuccessListener(aVoid ->
-                                    Toast.makeText(getActivity(), "Generated exercises saved", Toast.LENGTH_SHORT).show()
-                            )
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(getActivity(), "Failed to save generated exercises", Toast.LENGTH_SHORT).show()
-                            );
+                    // Remove existing data and write new data
+                    settingsRef.removeValue().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Write new settings
+                            settingsRef.setValue(model)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show();
+
+                                        // Remove existing workout data and write new workout
+                                        workoutRef.removeValue().addOnCompleteListener(workoutTask -> {
+                                            if (workoutTask.isSuccessful()) {
+                                                workoutRef.setValue(generatedList)
+                                                        .addOnSuccessListener(aVoid1 -> {
+                                                            Toast.makeText(getActivity(), "Generated exercises saved", Toast.LENGTH_SHORT).show();
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            Toast.makeText(getActivity(), "Failed to save generated exercises", Toast.LENGTH_SHORT).show();
+                                                        });
+                                            } else {
+                                                Toast.makeText(getActivity(), "Failed to remove existing workout data", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(getActivity(), "Failed to save settings", Toast.LENGTH_SHORT).show();
+                                    });
+                        } else {
+                            Toast.makeText(getActivity(), "Failed to remove existing settings", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     if (selectedLevels.isEmpty()) {
                         Toast.makeText(getActivity(), "You must choose a level", Toast.LENGTH_SHORT).show();
