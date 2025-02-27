@@ -448,7 +448,7 @@ public class ExerciseHandler {
                 } else {
                     // If no workout exists, navigate to settings
                     if (navController != null) {
-                        navController.navigate(R.id.action_to_settings);
+                        navController.navigate(R.id.action_logIn_to_settings);
                     }
                 }
             }

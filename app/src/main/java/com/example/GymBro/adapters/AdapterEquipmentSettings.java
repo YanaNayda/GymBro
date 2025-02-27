@@ -52,6 +52,9 @@ public class AdapterEquipmentSettings extends RecyclerView.Adapter<AdapterEquipm
         EquipmentModel equipment = equipmentEquipments.get(position);
         holder.nameEquipment.setText(equipment.getName());
 
+        // Set the selected state of the view
+        holder.nameEquipment.setSelected(equipment.isSelected());
+
         // Update button appearance based on selection state
         if (equipment.isSelected()) {
             // Selected state: Make the button appear "pressed"
