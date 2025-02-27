@@ -239,39 +239,21 @@ public class Settings extends Fragment {
                 ArrayList<String> selectedDays = new ArrayList<>();
                 ArrayList<String> selectedEquipment = new ArrayList<>();
 
-                // Add selected levels, days, and equipment to their respective lists
-                if (btn_beginner.isSelected()) {
-                    selectedLevels.add("beginner");
-                }
-                if (btn_intermediate.isSelected()) {
-                    selectedLevels.add("intermediate");
-                }
-                if (btn_expert.isSelected()) {
-                    selectedLevels.add("expert");
-                }
+                // Add selected levels
+                if (btn_beginner.isSelected()) selectedLevels.add("beginner");
+                if (btn_intermediate.isSelected()) selectedLevels.add("intermediate");
+                if (btn_expert.isSelected()) selectedLevels.add("expert");
 
-                if (btn_sunday.isSelected()) {
-                    selectedDays.add("Sunday");
-                }
-                if (btn_monday.isSelected()) {
-                    selectedDays.add("Monday");
-                }
-                if (btn_tuesday.isSelected()) {
-                    selectedDays.add("Tuesday");
-                }
-                if (btn_wednesday.isSelected()) {
-                    selectedDays.add("Wednesday");
-                }
-                if (btn_thursday.isSelected()) {
-                    selectedDays.add("Thursday");
-                }
-                if (btn_friday.isSelected()) {
-                    selectedDays.add("Friday");
-                }
-                if (btn_saturday.isSelected()) {
-                    selectedDays.add("Saturday");
-                }
+                // Add selected days
+                if (btn_sunday.isSelected()) selectedDays.add("Sunday");
+                if (btn_monday.isSelected()) selectedDays.add("Monday");
+                if (btn_tuesday.isSelected()) selectedDays.add("Tuesday");
+                if (btn_wednesday.isSelected()) selectedDays.add("Wednesday");
+                if (btn_thursday.isSelected()) selectedDays.add("Thursday");
+                if (btn_friday.isSelected()) selectedDays.add("Friday");
+                if (btn_saturday.isSelected()) selectedDays.add("Saturday");
 
+                // Add selected equipment
                 for (EquipmentModel equipment : equipmentSetEquipments) {
                     if (equipment.isSelected()) {
                         selectedEquipment.add(equipment.getName());
@@ -281,13 +263,18 @@ public class Settings extends Fragment {
                     selectedEquipment.add("full body");
                 }
 
-                // Check if mAuth is initialized
-                if (mAuth == null) {
-                    Toast.makeText(getActivity(), "FirebaseAuth not initialized", Toast.LENGTH_SHORT).show();
-                    return;
+                // 🚨 Stop execution if days or levels are empty
+                if (selectedLevels.isEmpty()) {
+                    Toast.makeText(getActivity(), "You must choose a level", Toast.LENGTH_SHORT).show();
+                    return;  // Prevents further execution
                 }
 
-                // Get the current user
+                if (selectedDays.isEmpty()) {
+                    Toast.makeText(getActivity(), "You must choose days", Toast.LENGTH_SHORT).show();
+                    return;  // Prevents further execution
+                }
+
+                // Proceed with Firebase operations & Navigation
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user == null) {
                     Toast.makeText(getActivity(), "User not logged in", Toast.LENGTH_SHORT).show();
@@ -295,88 +282,42 @@ public class Settings extends Fragment {
                 }
 
                 String uid = user.getUid();
+                SettingsModel model = new SettingsModel(selectedLevels, selectedEquipment, selectedDays);
 
-                if (!selectedLevels.isEmpty() || !selectedDays.isEmpty() || !selectedEquipment.isEmpty()) {
-                    // Create the settings model
-                    SettingsModel model = new SettingsModel(
-                            selectedLevels,
-                            selectedEquipment,
-                            selectedDays
-                    );
-
-                    // Get the ExerciseHandler and generate the weekly workout
-                    ExerciseHandler handler = null;
-                    if (getActivity() instanceof MainActivity) {
-                        MainActivity newActivity = (MainActivity) getActivity();
-                        handler = newActivity.getHandler();
-                    }
-                    if (getActivity() instanceof GymActivity) {
-                        GymActivity newActivity = (GymActivity) getActivity();
-                        handler = newActivity.getHandler();
-                    }
-                    assert handler != null;
-                    ArrayList<ExerciseModel> exercises = handler.getExercisesList();
-                    ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(
-                            exercises, selectedDays, selectedEquipment, selectedLevels
-                    );
-
-                    handler.setWeeklyWorkout(generatedList);
-
-                    // Get references to the Firebase nodes
-                    DatabaseReference settingsRef = FirebaseDatabase.getInstance()
-                            .getReference("Users")
-                            .child(uid)
-                            .child("settings");
-
-                    DatabaseReference workoutRef = FirebaseDatabase.getInstance()
-                            .getReference("Users")
-                            .child(uid)
-                            .child(handler.getCurrentWeekKey());
-
-                    // Remove existing data and write new data
-                    settingsRef.removeValue().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Write new settings
-                            settingsRef.setValue(model)
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(getActivity(), "Settings saved", Toast.LENGTH_SHORT).show();
-
-                                        // Remove existing workout data and write new workout
-                                        workoutRef.removeValue().addOnCompleteListener(workoutTask -> {
-                                            if (workoutTask.isSuccessful()) {
-                                                workoutRef.setValue(generatedList)
-                                                        .addOnSuccessListener(aVoid1 -> {
-                                                            Toast.makeText(getActivity(), "Generated exercises saved", Toast.LENGTH_SHORT).show();
-                                                        })
-                                                        .addOnFailureListener(e -> {
-                                                            Toast.makeText(getActivity(), "Failed to save generated exercises", Toast.LENGTH_SHORT).show();
-                                                        });
-                                            } else {
-                                                Toast.makeText(getActivity(), "Failed to remove existing workout data", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(getActivity(), "Failed to save settings", Toast.LENGTH_SHORT).show();
-                                    });
-                        } else {
-                            Toast.makeText(getActivity(), "Failed to remove existing settings", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    if (selectedLevels.isEmpty()) {
-                        Toast.makeText(getActivity(), "You must choose a level", Toast.LENGTH_SHORT).show();
-                    }
-                    if (selectedDays.isEmpty()) {
-                        Toast.makeText(getActivity(), "You must choose days", Toast.LENGTH_SHORT).show();
-                    }
+                ExerciseHandler handler = null;
+                if (getActivity() instanceof MainActivity) {
+                    handler = ((MainActivity) getActivity()).getHandler();
+                } else if (getActivity() instanceof GymActivity) {
+                    handler = ((GymActivity) getActivity()).getHandler();
                 }
-                if (getActivity() instanceof MainActivity)
-                    Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
-                else
-                    Navigation.findNavController(view).navigate(R.id.workout);
+                assert handler != null;
+
+                ArrayList<ExerciseModel> exercises = handler.getExercisesList();
+                ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(
+                        exercises, selectedDays, selectedEquipment, selectedLevels
+                );
+
+                handler.setWeeklyWorkout(generatedList);
+
+                DatabaseReference settingsRef = FirebaseDatabase.getInstance()
+                        .getReference("Users").child(uid).child("settings");
+
+                DatabaseReference workoutRef = FirebaseDatabase.getInstance()
+                        .getReference("Users").child(uid).child(handler.getCurrentWeekKey());
+
+                settingsRef.setValue(model).addOnSuccessListener(aVoid -> {
+                    workoutRef.setValue(generatedList).addOnSuccessListener(aVoid1 -> {
+                        Toast.makeText(getActivity(), "Settings and workout saved", Toast.LENGTH_SHORT).show();
+                        // ✅ Navigation only happens **after** validation
+                        if (getActivity() instanceof MainActivity)
+                            Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
+                        else
+                            Navigation.findNavController(view).navigate(R.id.workout);
+                    });
+                });
             }
         });
+
     }
 
     // Helper method to check if all equipment items are selected
