@@ -1,6 +1,7 @@
 package com.example.GymBro.adapters;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.GymBro.R;
@@ -18,14 +19,19 @@ import com.example.GymBro.models.ExerciseModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyViewHolder> {
+public class AdapterExercise extends RecyclerView.Adapter<AdapterExercise.MyViewHolder> {
 
     private ArrayList<ExerciseModel> exerciseArr;
-    private ArrayList<ExerciseModel> filterexerciseArr ;
+    private ArrayList<ExerciseModel> filterexerciseArr;
+    private NavController navController;
 
-    public AdapterExercise (ArrayList<ExerciseModel> exerciseAdapter) {
+    public AdapterExercise(ArrayList<ExerciseModel> exerciseAdapter) {
         this.exerciseArr = exerciseAdapter;
         this.filterexerciseArr = new ArrayList<>(exerciseAdapter);
+    }
+
+    public void setNavController(NavController navController) {
+        this.navController = navController;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -85,23 +91,25 @@ public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyVie
 
     @Override
     public void onBindViewHolder(@NonNull AdapterExercise.MyViewHolder holder, int position) {
-
         if (filterexerciseArr == null || filterexerciseArr.isEmpty()) {
             Log.e("AdapterExercise", "filterexerciseArr is empty");
             return;
         }
 
-            ExerciseModel currentItem = filterexerciseArr.get(position);
-            holder.nameExercise.setText(currentItem.getName());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v).navigate(R.id.action_exercise2_to_exerciseItem);
-
-
-                }
-            });
-
+        ExerciseModel currentItem = filterexerciseArr.get(position);
+        holder.nameExercise.setText(currentItem.getName());
+        holder.itemView.setOnClickListener(v -> {
+            if (navController != null) {
+                Bundle bundle = new Bundle();
+                Log.d("AdapterExercise", "Sending exercise: " + currentItem.getName() + 
+                    ", Level: " + currentItem.getLevel() + 
+                    ", Equipment: " + currentItem.getEquipment());
+                bundle.putSerializable("exercise", currentItem);
+                navController.navigate(R.id.action_exercise2_to_exerciseItem, bundle);
+            } else {
+                Log.e("AdapterExercise", "NavController is null");
+            }
+        });
     }
 
     @Override

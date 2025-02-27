@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.example.GymBro.handlers.ExerciseHandler;
+import com.example.GymBro.classes.ExerciseHandlerSingleton;
 
 public class Motivation extends Fragment {
 
@@ -65,43 +67,23 @@ public class Motivation extends Fragment {
     }
 
     private void fetchAnimalLevel() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // User is not logged in, handle accordingly
-            return;
-        }
+        ExerciseHandlerSingleton handlerSingleton = ExerciseHandlerSingleton.getInstance(requireContext());
+        ExerciseHandler handler = handlerSingleton.getHandler();
 
-        String userId = user.getUid();
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int animalLevel = 0;
-
-                // Iterate through all child nodes under the user
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    // Check if the child node is a week (e.g., "week1_Jan_2024", "week2_Feb_2024", etc.)
-                    String key = childSnapshot.getKey();
-                    if (key != null && key.startsWith("week")) {
-                        animalLevel++;
-                    }
-                }
-
-                // Update the TextView with the number of weeks saved
-                animalLevelTextView.setText("Animal Level: " + animalLevel);
-
-                // Set the appropriate image and levels left text based on the animal level
-                setAnimalImageAndLevelsLeft(animalLevel);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors.
-                animalLevelTextView.setText("Failed to load animal level.");
-                levelsLeftTextView.setText("");
+        handler.getAnimalLevel(level -> {
+            if (isAdded()) { // Check if fragment is still attached
+                // Use the level here to update your UI
+                updateAnimalLevel(level);
             }
         });
+    }
+
+    private void updateAnimalLevel(int animalLevel) {
+        // Update the TextView with the number of weeks saved
+        animalLevelTextView.setText("Animal Level: " + animalLevel);
+
+        // Set the appropriate image and levels left text based on the animal level
+        setAnimalImageAndLevelsLeft(animalLevel);
     }
 
     private void setAnimalImageAndLevelsLeft(int animalLevel) {

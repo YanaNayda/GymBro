@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExerciseModel {
+public class ExerciseModel implements Serializable {
     String name;
     String level;
     String equipment;
@@ -14,6 +14,7 @@ public class ExerciseModel {
     String instructions;
     String img0;
     String img1;
+    private boolean isSelected;
 
     public ExerciseModel(String name, String level, String equipment, String category, ArrayList<String> primaryMuscles, ArrayList<String> secondaryMuscles, String instructions, String img0, String img1, boolean isSelected) {
         this.name = name;
@@ -42,8 +43,6 @@ public class ExerciseModel {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
-    private boolean isSelected;
 
     public String getName() {
         return name;

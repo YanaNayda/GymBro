@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.GymBro.R;
+import com.example.GymBro.activities.GymActivity;
 import com.example.GymBro.activities.MainActivity;
 import com.example.GymBro.adapters.AdapterEquipmentSettings;
 import com.example.GymBro.classes.DataEquipment;
@@ -304,13 +305,22 @@ public class Settings extends Fragment {
                     );
 
                     // Get the ExerciseHandler and generate the weekly workout
-                    MainActivity newActivity = (MainActivity) getActivity();
-                    assert newActivity != null;
-                    ExerciseHandler handler = newActivity.getHandler();
+                    ExerciseHandler handler = null;
+                    if (getActivity() instanceof MainActivity) {
+                        MainActivity newActivity = (MainActivity) getActivity();
+                        handler = newActivity.getHandler();
+                    }
+                    if (getActivity() instanceof GymActivity) {
+                        GymActivity newActivity = (GymActivity) getActivity();
+                        handler = newActivity.getHandler();
+                    }
+                    assert handler != null;
                     ArrayList<ExerciseModel> exercises = handler.getExercisesList();
                     ArrayList<ArrayList<ExerciseModel>> generatedList = handler.generateWeeklyWorkout(
                             exercises, selectedDays, selectedEquipment, selectedLevels
                     );
+
+                    handler.setWeeklyWorkout(generatedList);
 
                     // Get references to the Firebase nodes
                     DatabaseReference settingsRef = FirebaseDatabase.getInstance()
@@ -361,8 +371,10 @@ public class Settings extends Fragment {
                         Toast.makeText(getActivity(), "You must choose days", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-                Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
+                if (getActivity() instanceof MainActivity)
+                    Navigation.findNavController(view).navigate(R.id.action_settings_to_gymActivity2);
+                else
+                    Navigation.findNavController(view).navigate(R.id.workout);
             }
         });
     }

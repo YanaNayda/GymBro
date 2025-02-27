@@ -27,6 +27,8 @@ import com.example.GymBro.models.EquipmentModel;
 import com.example.GymBro.models.ExerciseModel;
 import com.example.GymBro.models.ExerciseViewModel;
 import com.example.GymBro.models.SettingsModel;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -117,13 +119,8 @@ public class Exercise extends Fragment {
         ExerciseHandler handler = handlerSingleton.getHandler();
         ExerciseList = handler.getExercisesList();
 
-        ArrayList<ExerciseModel> exercises =  new ArrayList<>();
-        for (ExerciseModel e : ExerciseList){
-            exercises.add(new ExerciseModel(
-                     e.getName()
-            ));
-        }
-        adapter = new AdapterExercise(exercises);
+        // Pass the complete exercise list instead of creating new objects with just names
+        adapter = new AdapterExercise(ExerciseList);
         recycleExercise.setAdapter(adapter);
 
         searchViewExercise.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -146,10 +143,18 @@ public class Exercise extends Fragment {
         return view;
     }
 
-        public RecyclerView getRecyclerView () {
-            return recycleExercise;
-        }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Get NavController after view is created
+        NavController navController = Navigation.findNavController(view);
+        adapter.setNavController(navController);
     }
+
+    public RecyclerView getRecyclerView () {
+        return recycleExercise;
+    }
+}
 
 
 

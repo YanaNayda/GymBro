@@ -105,14 +105,6 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onWorkoutLoaded(ArrayList<ArrayList<ExerciseModel>> weeklyWorkout) {
                                     // Handle the loaded workout
-                                    if (weeklyWorkout == null || weeklyWorkout.isEmpty()) {
-                                        Log.d("Workout", "No workout found or generated");
-                                    } else {
-                                        Log.d("Workout", "Workout loaded successfully");
-                                        for (int i = 0; i < weeklyWorkout.size(); i++) {
-                                            Log.d("Workout", "Day " + (i + 1) + ": " + weeklyWorkout.get(i));
-                                        }
-                                    }
                                     handler.setWeeklyWorkout(weeklyWorkout);
                                     // Set the workout in the Singleton (if needed)
                                     //WorkoutDataHolder.getInstance().setWorkout(weeklyWorkout);
@@ -147,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser newUser = task.getResult().getUser();
                             if (newUser != null) {
                                 String userId = newUser.getUid();
-                                addData(userId); // Передаём userId в addData()
+                                addData(userId);
                             }
                             Toast.makeText(MainActivity.this, "Registered Successfuly", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(view).navigate(R.id.action_registration_to_settings);
