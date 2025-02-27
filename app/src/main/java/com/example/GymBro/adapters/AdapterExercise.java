@@ -1,6 +1,9 @@
 package com.example.GymBro.adapters;
 
-import android.graphics.Color;
+import static android.app.PendingIntent.getActivity;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,24 +11,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.GymBro.R;
-import com.example.GymBro.models.EquipmentModel;
 import com.example.GymBro.models.ExerciseModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyViewHolder> {
 
     private ArrayList<ExerciseModel> exerciseArr;
     private ArrayList<ExerciseModel> filterexerciseArr ;
 
+
     public AdapterExercise (ArrayList<ExerciseModel> exerciseAdapter) {
         this.exerciseArr = exerciseAdapter;
         this.filterexerciseArr = new ArrayList<>(exerciseAdapter);
+
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -36,6 +39,7 @@ public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyVie
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void getFilter(String charText) {
         charText = charText.toLowerCase();
         filterexerciseArr.clear();
@@ -61,8 +65,7 @@ public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyVie
         notifyDataSetChanged();
     }
 
-
-
+    @SuppressLint("NotifyDataSetChanged")
     public void setExercisesList(ArrayList<ExerciseModel> newExercises) {
         if (newExercises != null && !newExercises.isEmpty()) {
             this.exerciseArr = newExercises;
@@ -85,23 +88,21 @@ public class AdapterExercise  extends RecyclerView.Adapter<AdapterExercise.MyVie
 
     @Override
     public void onBindViewHolder(@NonNull AdapterExercise.MyViewHolder holder, int position) {
-
         if (filterexerciseArr == null || filterexerciseArr.isEmpty()) {
             Log.e("AdapterExercise", "filterexerciseArr is empty");
             return;
         }
 
-            ExerciseModel currentItem = filterexerciseArr.get(position);
-            holder.nameExercise.setText(currentItem.getName());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v).navigate(R.id.action_exercise2_to_exerciseItem);
+        ExerciseModel currentItem = filterexerciseArr.get(position);
+        holder.nameExercise.setText(currentItem.getName());
 
 
-                }
-            });
+        holder.itemView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("exerciseName", currentItem.getName());
 
+
+        });
     }
 
     @Override

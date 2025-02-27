@@ -4,20 +4,20 @@
 
     <item
         android:id="@+id/workout_button"
-        android:icon="@drawable/img_lock_close"
+        android:icon="@drawable/workout_icon"
         android:title="Workout"
         app:showAsAction="ifRoom" />
 
 
     <item
         android:id="@+id/exercise_button"
-        android:icon="@drawable/img_lock_close"
+        android:icon="@drawable/workout_icon"
         android:title="Exercise"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/motivation_button"
-        android:icon="@drawable/img_lock_close"
+        android:icon="@drawable/motivation_icon"
         android:title="Motivation"
         app:showAsAction="ifRoom" />
 

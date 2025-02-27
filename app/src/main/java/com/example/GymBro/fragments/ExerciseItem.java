@@ -7,15 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.GymBro.R;
-import com.example.GymBro.classes.ExerciseHandlerSingleton;
-import com.example.GymBro.handlers.ExerciseHandler;
-import com.example.GymBro.models.ExerciseModel;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,16 +25,6 @@ public class ExerciseItem extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private ImageView img_exercise;
-    private TextView txt_name_exercise;
-    private TextView txt_equipment_exercise;
-    private TextView txt_level_exercise;
-    private TextView txt_category_exercise;
-    private TextView txt_primary_muscles;
-    private TextView txt_secondary_muscles;
-    private TextView txt_instructions;
-
 
     public ExerciseItem() {
         // Required empty public constructor
@@ -78,25 +61,6 @@ public class ExerciseItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View view = inflater.inflate(R.layout.fragment_exercise_item, container, false);
-
-        txt_name_exercise = view.findViewById(R.id.txt_name_exercise);
-        txt_equipment_exercise = view.findViewById(R.id.txt_equipment_exercise);
-        txt_level_exercise = view.findViewById(R.id.txt_level_exercise);
-        txt_category_exercise = view.findViewById(R.id.txt_category_exercise);
-        txt_primary_muscles = view.findViewById(R.id.txt_primary_muscles);
-        txt_secondary_muscles = view.findViewById(R.id.txt_secondary_muscles);
-        txt_instructions = view.findViewById(R.id.txt_instructions);
-        img_exercise = view.findViewById(R.id.img_exercise);
-
-        ArrayList<ArrayList<ExerciseModel>> ExerciseList = new ArrayList<>();
-        ExerciseHandlerSingleton handlerSingleton = ExerciseHandlerSingleton.getInstance(getContext());
-        ExerciseHandler handler = handlerSingleton.getHandler();
-
-        ExerciseList = handler.getWeeklyWorkout();
-
-
-        return view;
+        return inflater.inflate(R.layout.fragment_exercise_item, container, false);
     }
 }

@@ -32,6 +32,8 @@
             android:id="@+id/action_registration_to_settings"
             app:destination="@id/settings" />
     </fragment>
+
+
     <fragment
         android:id="@+id/settings"
         android:name="com.example.GymBro.fragments.Settings"
@@ -46,35 +48,18 @@
         android:name="com.example.GymBro.activities.GymActivity"
         android:label="activity_gym"
         tools:layout="@layout/activity_gym" />
-
-
     <fragment
-        android:id="@+id/motivation2"
-        android:name="com.example.GymBro.fragments.Motivation"
-        android:label="fragment_motivation"
-        tools:layout="@layout/fragment_motivation" />
-    <fragment
-        android:id="@+id/exercise2"
+        android:id="@+id/exercise3"
         android:name="com.example.GymBro.fragments.Exercise"
         android:label="fragment_exercise"
-        tools:layout="@layout/fragment_exercise" >
-        <action
-            android:id="@+id/action_exercise2_to_exerciseItem"
-            app:destination="@id/exerciseItem" />
-    </fragment>
+        tools:layout="@layout/fragment_exercise" />
+
+
     <fragment
-        android:id="@+id/exerciseItem"
-        android:name="com.example.GymBro.fragments.ExerciseItem"
-        android:label="fragment_exercise_item"
-        tools:layout="@layout/fragment_exercise_item" />
-    <fragment
-        android:id="@+id/workout"
-        android:name="com.example.GymBro.fragments.Workout"
+        android:id="@+id/workout2"
+        android:name="com.example.GymBro.fragments.WorkoutDay"
         android:label="fragment_workout"
-        tools:layout="@layout/fragment_workout" >
-        <action
-            android:id="@+id/action_workout_to_exerciseItem"
-            app:destination="@id/exerciseItem" />
-    </fragment>
+        tools:layout="@layout/fragment_workout_day" />
+
 
 </navigation>

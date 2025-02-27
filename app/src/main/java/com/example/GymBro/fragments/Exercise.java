@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,7 +59,7 @@ public class Exercise extends Fragment {
     private AdapterExercise adapter;
     private SearchView searchViewExercise;
 
-    private RecyclerView recyclerView;
+
 
     private ArrayList<ExerciseModel> exercises = new ArrayList<>();
 
@@ -103,12 +106,14 @@ public class Exercise extends Fragment {
 
         ArrayList<ExerciseModel> ExerciseList = new ArrayList<>();
 
+        //NavController navController = Navigation.findNavController(view);
+
         recycleExercise = view.findViewById(R.id.recycle_view_exercise);
         recycleExercise.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(getContext());
         recycleExercise.setLayoutManager(layoutManager);
         recycleExercise.setItemAnimator(new DefaultItemAnimator());
+
 
         searchViewExercise= view.findViewById(R.id.searchViewExercise);
 
@@ -123,7 +128,10 @@ public class Exercise extends Fragment {
                      e.getName()
             ));
         }
+
         adapter = new AdapterExercise(exercises);
+        recycleExercise.setAdapter(adapter);
+        adapter = new AdapterExercise(ExerciseList);
         recycleExercise.setAdapter(adapter);
 
         searchViewExercise.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -142,10 +150,8 @@ public class Exercise extends Fragment {
             }
         });
 
-
         return view;
     }
-
         public RecyclerView getRecyclerView () {
             return recycleExercise;
         }

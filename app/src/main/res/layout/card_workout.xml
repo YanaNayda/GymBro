@@ -19,7 +19,7 @@
 
 
         <TextView
-            android:id="@+id/text_name_exercise"
+            android:id="@+id/text_day_workout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

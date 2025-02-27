@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/exercise"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:navGraph="@navigation/nav_graph"
-    android:background="@drawable/gym_bro_back_exercise"
-    tools:context=".fragments.Exercise">
+    android:background="@drawable/gym_bro_back_workout"
+    tools:context=".fragments.WorkoutDay">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,19 +24,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Exercise"
+                android:text="It is your Workout for this week "
                 android:textColor="#FFFF"
                 android:textSize="27sp"
                 android:textStyle="bold" />
 
-            <SearchView
-                android:id="@+id/searchViewExercise"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/edit_txt_back"
-                android:queryHint="Search Exercises" />
 
         </LinearLayout>
 
@@ -48,7 +38,7 @@
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_view_exercise"
+                android:id="@+id/recycle_view_workout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"

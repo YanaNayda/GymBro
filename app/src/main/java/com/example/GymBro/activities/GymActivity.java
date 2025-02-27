@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.GymBro.R;
 import com.example.GymBro.classes.ExerciseHandlerSingleton;
 import com.example.GymBro.fragments.Exercise;
-import com.example.GymBro.fragments.Workout;
+import com.example.GymBro.fragments.WorkoutDay;
 import com.example.GymBro.fragments.Motivation;
 import com.example.GymBro.fragments.Settings;
 import com.example.GymBro.handlers.ExerciseHandler;
@@ -69,7 +69,7 @@ public class GymActivity extends AppCompatActivity {
 
 
             if (item.getItemId() == R.id.workout_button) {
-                selectedFragment = new Workout();
+                selectedFragment = new WorkoutDay();
             } else if (item.getItemId() == R.id.exercise_button) {
                 selectedFragment = new Exercise();
             } else if (item.getItemId() == R.id.motivation_button) {
