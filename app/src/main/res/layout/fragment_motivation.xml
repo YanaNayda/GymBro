@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Animal Level: 0"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"/>
@@ -35,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Levels left to evolve: 0"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/animalImageView"

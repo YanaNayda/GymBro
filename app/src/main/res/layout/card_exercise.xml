@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:backgroundTint="@null"
+    app:cardBackgroundColor="@null"
     app:navGraph="@navigation/nav_graph"
     android:layout_margin="5dp">
 
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:backgroundTint="@null"
-        android:background="@drawable/btn_back_choose"
+        android:background="@color/white"
         android:padding="8dp">
 
 
